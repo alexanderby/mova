@@ -58,7 +58,7 @@ function parseEndings($ends) {
  */
 function getMatchedEndings(word, ends) {
     let maxLen = 0;
-    let matchedEnd = null;
+    let matchedEnd = '';
     let matchedGroups = [];
     const groupNames = Object.keys(ends);
     for (const g of groupNames) {
