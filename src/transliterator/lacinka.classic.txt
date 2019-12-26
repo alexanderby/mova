@@ -1,0 +1,92 @@
+[consonant]
+б в г д ж з й к л м н п р с т ў ф х ц ч ш щ
+
+[consonant-no-L]
+б в г д ж з й к м н п р с т ў ф х ц ч ш щ
+
+[vowel]
+а е ё и і о у ы э ю я
+
+[iot]
+е ё ю я
+
+[pause]
+' ’ -
+
+а a
+б b
+в v
+г h
+д d
+е e
+ё o
+ж ž
+з z
+і i
+и i
+й j
+к k
+л ł
+м m
+н n
+о o
+п p
+р r
+с s
+т t
+у u
+ў ŭ
+ф f
+х ch
+ц c
+ч č
+ш š
+щ šč
+ъ '
+ы y
+ь 
+э e
+ю u
+я a
+
+^е je
+^ё jo
+^ю ju
+^я ja
+
+[pause]е je
+[pause]ё jo
+[pause]ю ju
+[pause]я ja
+
+[vowel]е je
+[vowel]ё jo
+[vowel]ю ju
+[vowel]я ja
+
+л[iot] l
+лі li
+ли li
+
+[consonant-no-L]е ie
+[consonant-no-L]ё io
+[consonant-no-L]ю iu
+[consonant-no-L]я ia
+
+[consonant-no-L]ея ieja
+[consonant-no-L]яе iaje
+[consonant-no-L]яя iaja
+
+бь b́
+вь v́
+зь ź
+ль l
+мь ḿ
+нь ń
+пь ṕ
+сь ś
+ць ć
+
+« "
+» "
+№ #

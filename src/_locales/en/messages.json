@@ -1,0 +1,17 @@
+{
+    "extension_description": {
+        "message": "A Russian to Belarusian translator"
+    },
+    "toggle_extension": {
+        "message": "Toggle the Extension"
+    },
+    "toggle_website": {
+        "message": "Toggle current website"
+    },
+    "enabled_for_website": {
+        "message": "Enabled for"
+    },
+    "enabled_by_default": {
+        "message": "Enabled by default"
+    }
+}

@@ -1,0 +1,17 @@
+{
+    "extension_description": {
+        "message": "Pierakładčyk z ruskaj na biełaruskuju movu"
+    },
+    "toggle_extension": {
+        "message": "Uklučyć ci vyklučyć pašyrennie"
+    },
+    "toggle_website": {
+        "message": "Uklučyć ci vyklučyć dla biagučaha sajtu"
+    },
+    "enabled_for_website": {
+        "message": "Uklučany dla"
+    },
+    "enabled_by_default": {
+        "message": "Uklučany dla ŭsich sajtaŭ"
+    }
+}

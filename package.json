@@ -1,0 +1,27 @@
+{
+  "name": "mova",
+  "version": "0.0.0",
+  "private": true,
+  "description": "A Russian to Belarusian translator for the browser",
+  "scripts": {
+    "test": "node --experimental-modules --es-module-specifier-resolution=node tests/translator.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexanderby/mova.git"
+  },
+  "author": "Alexander Shutau",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alexanderby/mova/issues"
+  },
+  "homepage": "https://github.com/alexanderby/mova#readme",
+  "type": "module",
+  "devDependencies": {
+    "@types/chrome": "0.0.91",
+    "@types/node": "12.12.21",
+    "fs-extra": "8.1.0",
+    "globby": "10.0.1"
+  },
+  "dependencies": {}
+}

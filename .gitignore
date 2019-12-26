@@ -1,0 +1,15 @@
+# Build files
+#-----------------------------------
+build
+build.zip
+build-firefox
+build-firefox.xpi
+
+# Node.js modules
+#-----------------------------------
+node_modules
+
+# IDE and editor configs
+#-----------------------------------
+.idea
+.vscode

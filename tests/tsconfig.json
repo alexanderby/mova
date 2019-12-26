@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "target": "esnext",
+        "module": "esnext",
+        "moduleResolution": "node",
+        "lib": [
+            "esnext"
+        ],
+        "types": [
+            "node"
+        ],
+        "allowJs": true,
+        "checkJs": true,
+        "noEmit": true
+    },
+    "exclude": [
+        "node_modules"
+    ]
+}
