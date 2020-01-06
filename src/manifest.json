@@ -9,14 +9,14 @@
         "default_title": "Mova",
         "default_popup": "popup/index.html",
         "default_icon": {
-            "38": "icons/pahonia-38x38.png",
-            "19": "icons/pahonia-19x19.png"
+            "38": "icons/icon-38x38.png",
+            "19": "icons/icon-19x19.png"
         }
     },
     "icons": {
-        "16": "icons/pahonia-16x16.png",
-        "48": "icons/pahonia-48x48.png",
-        "128": "icons/pahonia-128x128.png"
+        "16": "icons/icon-16x16.png",
+        "48": "icons/icon-48x48.png",
+        "128": "icons/icon-128x128.png"
     },
     "background": {
         "persistent": true,
