@@ -1,79 +1,84 @@
-import {createExtendedDictionary} from '../translator/dictionary.js';
-import createTranslator from '../translator/index.js';
-import createKalhoznik from '../translator/trasianka.js';
-import createTrasliterator from '../transliterator/index.js';
 import {getActiveTabHost} from '../utils/chrome.js';
-import {openFile} from '../utils/file.js';
+import messenger from './messenger.js';
 import storage from './storage.js';
+import textProcessor from './text-processor.js';
 
-/** @type {(text: string) => string} */
-let translate = null;
-
-/** @type {(text: string) => string} */
-let transliterate = null;
+/** @typedef {import('./messenger').Message} Message */
+/** @typedef {import('./messenger').PortMessageListener} MessageListener */
+/** @typedef {import('./storage').TranslationSettings} TranslationSettings */
+/** @typedef {import('./storage').UserSettings} UserSettings */
 
 /** @type {Function[]} */
 const awaiting = [];
-let didAppLoad = false;
+let isReady = false;
 
-function waitForAppLoading() {
+function whenAppReady() {
     return new Promise((resolve) => awaiting.push(resolve));
 };
 
-async function init() {
-    const $dictionary = await openFile('translator/dictionary.ru-be.txt');
-    const $ruEnds = await openFile('translator/endings.ru.txt');
-    const $beEnds = await openFile('translator/endings.be.txt');
-    const $trasianka = await openFile('translator/trasianka.txt');
-    const $lacinka = await openFile('transliterator/lacinka.classic.txt');
+/**
+ * @param {{id: number; text: string; settings: TranslationSettings}} data
+ * @param {(msg: Message) => void} sendMessage
+ */
+function onTextTranslate({id, text, settings}, sendMessage) {
+    const result = textProcessor.process(text, settings);
+    sendMessage({type: 'done', data: {id, text: result}});
+}
 
-    const dictionary = createExtendedDictionary($dictionary, $ruEnds, $beEnds);
-    const luka = createKalhoznik($trasianka);
-    translate = createTranslator({dictionary, fallback: (word) => luka(word)});
-    transliterate = createTrasliterator($lacinka);
+/** @type {MessageListener} */
+async function onTabMessage({type, data}, sendMessage) {
+    if (!isReady) {
+        await whenAppReady();
+    }
+    if (type === 'translate') {
+        onTextTranslate(data, sendMessage);
+    }
+}
 
-    didAppLoad = true;
+/**
+ * @param {(settings: Message) => void} sendMessage
+ */
+async function onTabConnect(sendMessage) {
+    const settings = await storage.getUserSettings();
+    sendMessage({type: 'app-settings', data: settings});
+}
+
+/**
+ * @param {(data: Message) => void} sendMessage
+ */
+async function onGetAppData(sendMessage) {
+    const host = await getActiveTabHost();
+    const settings = await storage.getUserSettings();
+    sendMessage({type: 'app-data', data: {host, settings}});
+}
+
+/**
+ * @param {UserSettings} settings 
+ */
+async function onChangeSettings(settings) {
+    await storage.setUserSettings(settings);
+    const saved = await storage.getUserSettings();
+    messenger.sendToAllTabs({type: 'app-settings', data: saved});
+}
+
+/** @type {MessageListener} */
+function onPopupMessage({type, data}, sendMessage) {
+    if (type === 'get-app-data') {
+        onGetAppData(sendMessage);
+    } else if (type === 'change-settings') {
+        onChangeSettings(data);
+    }
+}
+
+async function start() {
+    messenger.onPopupMessage(onPopupMessage);
+    messenger.onTabConnect(onTabConnect);
+    messenger.onTabMessage(onTabMessage);
+
+    await textProcessor.init();
+
+    isReady = true;
     awaiting.forEach((resolve) => resolve);
 }
 
-/** @type {Set<chrome.runtime.Port>} */
-const tabPorts = new Set();
-
-chrome.runtime.onConnect.addListener(async (port) => {
-    if (port.name === 'tab') {
-        tabPorts.add(port);
-        port.onDisconnect.addListener(() => tabPorts.delete(port));
-        port.onMessage.addListener(async ({type, data}) => {
-            if (!didAppLoad) {
-                await waitForAppLoading();
-            }
-            if (type === 'translate') {
-                const {id, text} = data;
-                port.postMessage({type: 'done', data: {id, text: transliterate(translate(text))}});
-            }
-            if (type === 'transliterate') {
-                const {id, text} = data;
-                port.postMessage({type: 'done', data: {id, text: transliterate(text)}});
-            }
-        });
-
-        const settings = await storage.getUserSettings();
-        port.postMessage({type: 'app-settings', data: settings});
-    } else if (port.name === 'popup') {
-        port.onMessage.addListener(async ({type, data}) => {
-            if (type === 'get-app-data') {
-                const host = await getActiveTabHost();
-                const settings = await storage.getUserSettings();
-                port.postMessage({type: 'app-data', data: {host, settings}});
-            } else if (type === 'change-settings') {
-                await storage.setUserSettings(data);
-                const settings = await storage.getUserSettings();
-                tabPorts.forEach((port) => {
-                    port.postMessage({type: 'app-settings', data: settings});
-                });
-            }
-        });
-    }
-});
-
-init();
+start();

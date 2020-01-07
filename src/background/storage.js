@@ -1,9 +1,18 @@
 /**
- * @typedef UserSettings
+ * @typedef TranslationSettings
+ * @property {boolean} translate
+ * @property {boolean} transliterate
+ */
+
+/**
+ * @typedef WebsitesSettings
  * @property {boolean} enabledByDefault
  * @property {string[]} enabledFor
  * @property {string[]} disabledFor
- * @property {boolean} transliterate
+ */
+
+/**
+ * @typedef {TranslationSettings & WebsitesSettings} UserSettings
  */
 
 /** @type {UserSettings} */
@@ -11,6 +20,7 @@ const defaultSettings = {
     enabledByDefault: true,
     enabledFor: [],
     disabledFor: [],
+    translate: true,
     transliterate: true,
 };
 
