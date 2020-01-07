@@ -1,7 +1,8 @@
-// NOTE: Modules are not supported.
-// TODO: Use bundler.
-
+/** @typedef {import('../background/storage').TranslationSettings} TranslationSettings */
 /** @typedef {import('../background/storage').UserSettings} UserSettings */
+
+/** @type {TranslationSettings} */
+let translationSettings;
 
 const messenger = (() => {
     const port = chrome.runtime.connect({name: 'tab'});
@@ -20,7 +21,7 @@ const messenger = (() => {
      */
     function send(type, data) {
         if (!port) {
-            console.log('no port');
+            console.warn('no port');
             return;
         }
         port.postMessage({type, data});
@@ -118,13 +119,19 @@ const textManager = (() => {
 
         const isCyrillic = hasCyrillicChars(text);
         if (isCyrillic) {
-            const isBelarusian = hasBelarusianChars(text);
             const id = counter++;
             waitingNodes.set(id, node);
-            messenger.send(
-                isBelarusian ? 'transliterate' : 'translate',
-                {id, text},
-            );
+
+            const isBelarusian = hasBelarusianChars(text);
+            if (isBelarusian && !translationSettings.transliterate) {
+                return;
+            }
+
+            const settings = {
+                ...translationSettings,
+                translate: isBelarusian ? false : true,
+            };
+            messenger.send('translate', {id, text, settings});
         }
     }
 
@@ -142,7 +149,11 @@ const textManager = (() => {
         waitingNodes.delete(id);
         if (text != null) {
             sourceTexts.set(node, node.textContent);
+            if (observer) {
+                handleMutations(observer.takeRecords());
+            }
             node.textContent = text;
+            observer.takeRecords();
         }
     });
 
@@ -209,11 +220,15 @@ const textManager = (() => {
         });
     }
 
-    function stopAndRestore() {
+    function stop() {
         if (observer) {
             observer.disconnect();
             observer = null;
         }
+    }
+
+    function stopAndRestore() {
+        stop();
         handledTextNodes = new WeakSet();
         walkedNodes = new WeakSet();
 
@@ -222,11 +237,17 @@ const textManager = (() => {
 
     return {
         translateAndWatch,
+        stop,
         stopAndRestore,
     };
 })();
 
 messenger.on('app-settings', (/** @type {UserSettings} */settings) => {
+    translationSettings = {
+        translate: settings.translate,
+        transliterate: settings.transliterate,
+    };
+
     try {
         const topHost = window.top.location.host;
         if (!topHost) {
@@ -245,3 +266,5 @@ messenger.on('app-settings', (/** @type {UserSettings} */settings) => {
     } catch (err) {
     }
 });
+
+messenger.onDisconnect(() => textManager.stop());
