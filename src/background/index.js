@@ -10,9 +10,13 @@ import textProcessor from './text-processor.js';
 
 /** @type {Function[]} */
 const awaiting = [];
-let isReady = false;
+let isAppReady = false;
 
 function whenAppReady() {
+    if (isAppReady) {
+        return;
+    }
+
     return new Promise((resolve) => awaiting.push(resolve));
 };
 
@@ -27,9 +31,8 @@ function onTextTranslate({id, text, settings}, sendMessage) {
 
 /** @type {MessageListener} */
 async function onTabMessage({type, data}, sendMessage) {
-    if (!isReady) {
-        await whenAppReady();
-    }
+    await whenAppReady();
+
     if (type === 'translate') {
         onTextTranslate(data, sendMessage);
     }
@@ -39,6 +42,8 @@ async function onTabMessage({type, data}, sendMessage) {
  * @param {(settings: Message) => void} sendMessage
  */
 async function onTabConnect(sendMessage) {
+    await whenAppReady();
+
     const settings = await storage.getUserSettings();
     sendMessage({type: 'app-settings', data: settings});
 }
@@ -62,7 +67,9 @@ async function onChangeSettings(settings) {
 }
 
 /** @type {MessageListener} */
-function onPopupMessage({type, data}, sendMessage) {
+async function onPopupMessage({type, data}, sendMessage) {
+    await whenAppReady();
+
     if (type === 'get-app-data') {
         onGetAppData(sendMessage);
     } else if (type === 'change-settings') {
@@ -77,7 +84,7 @@ async function start() {
 
     await textProcessor.init();
 
-    isReady = true;
+    isAppReady = true;
     awaiting.forEach((resolve) => resolve);
 }
 
