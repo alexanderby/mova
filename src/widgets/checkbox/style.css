@@ -1,0 +1,62 @@
+@import "../../theme.css";
+
+:host {
+    display: inline-block;
+}
+
+.checkbox {
+    box-sizing: border-box;
+    cursor: pointer;
+    display: inline-flex;
+    padding: 0.5rem;
+    width: 100%;
+}
+
+.checkbox:hover {
+    background-color: var(--color-hover);
+}
+
+input {
+    display: none;
+}
+
+.icon {
+    display: inline-block;
+    flex: none;
+    height: 1rem;
+    width: 1rem;
+}
+
+.checkmark {
+    display: inline-block;
+}
+
+.checkmark__on {
+    fill: var(--color-accent);
+    display: none;
+}
+
+.checkmark__off {
+    fill: var(--color-text-inactive);
+}
+
+input:checked + .icon .checkmark__on {
+    display: initial;
+}
+
+input:checked + .icon .checkmark__off {
+    display: none;
+}
+
+.content {
+    color: var(--color-text-inactive);
+    display: inline-flex;
+    flex: auto;
+    line-height: 1rem;
+    margin-left: 0.25rem;
+    overflow: hidden;
+}
+
+input:checked ~ .content {
+    color: var(--color-text);
+}

@@ -1,21 +1,18 @@
+import checkmark from './checkmark.js';
+
 export default class CheckBox extends HTMLElement {
+    static tag = 'mv-checkbox';
+    static htmlURL = 'widgets/checkbox/index.html';
+    static cssURL = 'widgets/checkbox/style.css';
+    /** @type {HTMLTemplateElement} */static template;
+
     constructor() {
         super();
 
         const root = this.attachShadow({mode: 'open'});
-
-        const label = document.createElement('label');
-        root.append(label);
-
-        this.input = document.createElement('input');
-        this.input.type = 'checkbox';
-        label.append(this.input);
-
-        this.content = document.createElement('span');
-        label.append(this.content);
-
-        const slot = document.createElement('slot');
-        this.content.append(slot);
+        root.append(CheckBox.template.content.cloneNode(true));
+        this.input = root.querySelector('input');
+        root.querySelector('.icon').append(checkmark());
     }
 
     /**
@@ -39,5 +36,3 @@ export default class CheckBox extends HTMLElement {
         this.input.addEventListener('change', () => callback(this.input.checked));
     }
 }
-
-customElements.define('m-checkbox', CheckBox);

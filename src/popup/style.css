@@ -1,0 +1,40 @@
+@import "../theme.css";
+
+html {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    width: 11rem;
+}
+
+body {
+    align-items: stretch;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.logo {
+    background-image: var(--url-logo);
+    height: 2rem;
+    margin: 0.75rem 0.5rem 0.25rem 0.5rem;
+    text-indent: -999rem;
+    width: 10rem;
+}
+
+.controls {
+    align-items: stretch;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.host-name {
+    display: inline-block;
+    line-height: 1rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+}

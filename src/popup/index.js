@@ -5,9 +5,12 @@ const port = chrome.runtime.connect({name: 'popup'});
 port.onMessage.addListener(({type, data}) => {
     if (type === 'app-data') {
         state.set(data);
-        state.onChange(({settings}) => port.postMessage({type: 'change-settings', data: settings}));
+        state.onChange(({settings}) => {
+            port.postMessage({type: 'change-settings', data: settings});
+        });
     }
 });
 
-initUI();
-port.postMessage({type: 'get-app-data'});
+initUI().then(() => {
+    port.postMessage({type: 'get-app-data'});
+});

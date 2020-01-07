@@ -8,20 +8,18 @@
 </head>
 
 <body>
-    <h1>Mova</h1>
+    <h1 class="logo">Mova</h1>
 
-    <div>
-        <m-checkbox class="js-enabled-for-website">
-            <span data-message="enabled_for_website"></span>
-            <span class="js-website-hostname"></span>
-        </m-checkbox>
-    </div>
+    <section class="controls">
+        <mv-checkbox class="js-enabled-for-website">
+            <!-- <span data-message="enabled_for_website"></span> -->
+            <span class="js-website-hostname host-name"></span>
+        </mv-checkbox>
 
-    <div>
-        <m-checkbox class="js-enabled-by-default">
+        <mv-checkbox class="js-enabled-by-default">
             <span data-message="enabled_by_default"></span>
-        </m-checkbox>
-    </div>
+        </mv-checkbox>
+    </section>
 </body>
 
 </html>

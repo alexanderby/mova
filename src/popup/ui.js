@@ -1,10 +1,17 @@
 import {isWebsiteEnabled} from '../background/storage.js';
-import {query} from '../utils/dom.js';
-import './checkbox.js';
+import {query, loadWebComponent} from '../utils/dom.js';
+import CheckBox from '../widgets/checkbox/index.js';
 import state from './state.js';
 
 /** @typedef {import('../background/storage').UserSettings} UserSettings */
-/** @typedef {import('./checkbox').default} CheckBox */
+
+const webComponents = [
+    CheckBox,
+];
+
+async function loadWebComponents() {
+    await Promise.all(webComponents.map((wc) => loadWebComponent(wc.htmlURL, wc.cssURL, wc.tag, wc)));
+}
 
 /**
  * @template TIn
@@ -50,7 +57,9 @@ function changeSettings(newSettings) {
     state.set({settings: {...state.get().settings, ...newSettings}});
 }
 
-export function initUI() {
+export async function initUI() {
+    await loadWebComponents();
+
     initLocale();
 
     initEnabledForWebsite({

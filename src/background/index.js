@@ -3,7 +3,7 @@ import createTranslator from '../translator/index.js';
 import createKalhoznik from '../translator/trasianka.js';
 import createTrasliterator from '../transliterator/index.js';
 import {getActiveTabHost} from '../utils/chrome.js';
-import {openFile} from './file.js';
+import {openFile} from '../utils/file.js';
 import storage from './storage.js';
 
 /** @type {(text: string) => string} */
