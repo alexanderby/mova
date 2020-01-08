@@ -1,5 +1,6 @@
 /**
  * @param {string} $dict
+ * @returns {[string, string][]}
  */
 function parseDictionary($dict) {
     const pairs = $dict
@@ -14,7 +15,7 @@ function parseDictionary($dict) {
                 .map((w) => w.toLocaleLowerCase())
                 .map((w, i) => i === 0 ? w.split('ё').join('е') : w);
         });
-    return data;
+    return /** @type {[string, string][]} */(data);
 }
 
 /**
@@ -79,14 +80,14 @@ function getMatchedEndings(word, ends) {
 }
 
 /**
- * @param {string[][]} dictionary 
+ * @param {[string, string][]} dictionary 
  * @param {EndingsCollection} srcEnds
  * @param {EndingsCollection} tgtEnds
  * @returns {Map<string, string>}
  */
 function buildExtendedDictionary(dictionary, srcEnds, tgtEnds) {
     /** @type {Map<string, string>} */
-    const extended = new Map();
+    const extended = new Map(dictionary);
 
     dictionary.forEach(([src, tgt]) => {
         const mSrc = getMatchedEndings(src, srcEnds);
