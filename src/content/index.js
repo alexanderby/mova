@@ -1,5 +1,5 @@
-/** @typedef {import('../background/storage').TranslationSettings} TranslationSettings */
-/** @typedef {import('../background/storage').UserSettings} UserSettings */
+/** @typedef {import('../definitions').TranslationSettings} TranslationSettings */
+/** @typedef {import('../definitions').UserSettings} UserSettings */
 
 /** @type {TranslationSettings} */
 let translationSettings;
@@ -112,7 +112,7 @@ const textManager = (() => {
         }
         handledTextNodes.add(node);
 
-        const text = node.textContent;
+        const text = sourceTexts.has(node) ? sourceTexts.get(node) : node.textContent;
         if (!text.trim()) {
             return;
         }
@@ -123,14 +123,14 @@ const textManager = (() => {
             waitingNodes.set(id, node);
 
             const isBelarusian = hasBelarusianChars(text);
-            if (isBelarusian && !translationSettings.transliterate) {
+            if (isBelarusian && translationSettings.transliteration === 'none') {
                 return;
             }
 
-            const settings = {
+            const settings = /** @type {TranslationSettings} */({
                 ...translationSettings,
-                translate: isBelarusian ? false : true,
-            };
+                translation: isBelarusian ? 'none' : 'ru-be',
+            });
             messenger.send('translate', {id, text, settings});
         }
     }
@@ -243,9 +243,10 @@ const textManager = (() => {
 })();
 
 messenger.on('app-settings', (/** @type {UserSettings} */settings) => {
+    const prevSettings = translationSettings;
     translationSettings = {
-        translate: settings.translate,
-        transliterate: settings.transliterate,
+        translation: settings.translation,
+        transliteration: settings.transliteration,
     };
 
     try {
@@ -258,10 +259,18 @@ messenger.on('app-settings', (/** @type {UserSettings} */settings) => {
             !settings.disabledFor.includes(topHost) :
             settings.enabledFor.includes(topHost);
 
+        const shouldRestore = prevSettings && (
+            !isEnabled ||
+            (prevSettings.translation !== translationSettings.translation) ||
+            (prevSettings.transliteration !== translationSettings.transliteration)
+        );
+
+        if (shouldRestore) {
+            textManager.stopAndRestore();
+        }
+
         if (isEnabled) {
             textManager.translateAndWatch();
-        } else {
-            textManager.stopAndRestore();
         }
     } catch (err) {
     }

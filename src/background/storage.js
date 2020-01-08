@@ -1,27 +1,12 @@
-/**
- * @typedef TranslationSettings
- * @property {boolean} translate
- * @property {boolean} transliterate
- */
-
-/**
- * @typedef WebsitesSettings
- * @property {boolean} enabledByDefault
- * @property {string[]} enabledFor
- * @property {string[]} disabledFor
- */
-
-/**
- * @typedef {TranslationSettings & WebsitesSettings} UserSettings
- */
+/** @typedef {import('../definitions').UserSettings} UserSettings */
 
 /** @type {UserSettings} */
 const defaultSettings = {
     enabledByDefault: true,
     enabledFor: [],
     disabledFor: [],
-    translate: true,
-    transliterate: true,
+    translation: 'ru-be',
+    transliteration: 'official',
 };
 
 /**

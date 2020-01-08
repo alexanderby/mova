@@ -1,4 +1,4 @@
-/** @typedef {import('../background/storage').UserSettings} UserSettings */
+/** @typedef {import('../definitions').UserSettings} UserSettings */
 
 /**
  * @typedef State

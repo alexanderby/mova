@@ -8,10 +8,19 @@
     "toggle_website": {
         "message": "Uklučyć ci vyklučyć dla biagučaha sajtu"
     },
-    "enabled_for_website": {
-        "message": "Uklučany dla"
-    },
     "enabled_by_default": {
         "message": "Uklučany dla ŭsich sajtaŭ"
+    },
+    "transliteration_basic": {
+        "message": "Lacinka prostaja"
+    },
+    "transliteration_classic": {
+        "message": "Łacinka kłasičnaja"
+    },
+    "transliteration_official": {
+        "message": "Lacinka aficyjnaja"
+    },
+    "transliteration_none": {
+        "message": "Kirylica"
     }
 }

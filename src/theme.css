@@ -1,18 +1,23 @@
 :root {
     --color-bg: #fff;
+    --color-hover: #ccc;
+    --color-input: #ccc;
+    --color-input-hover: #aaa;
     --color-text: #000;
     --color-text-inactive: #777;
-    --color-hover: #0001;
     --color-accent: #d23;
+    --font: Helvetia Neue, Open Sans, Segoe UI, Ubuntu, sans-serif;
     --url-logo: url(../icons/logo-light-80x16.svg);
 }
 
 @media (prefers-color-scheme: dark) {
     :root {
         --color-bg: #222;
+        --color-hover: #333;
+        --color-input: #333;
+        --color-input-hover: #444;
         --color-text: #ddd;
         --color-text-inactive: #aaa;
-        --color-hover: #fff1;
         --url-logo: url(../icons/logo-dark-80x16.svg);
     }
 }

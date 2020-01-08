@@ -1,0 +1,26 @@
+{
+    "extension_description": {
+        "message": "Перакладчык з рускай на беларускую мову"
+    },
+    "toggle_extension": {
+        "message": "Уключыць ці выключыць пашырэнне"
+    },
+    "toggle_website": {
+        "message": "Уключыць ці выключыць для бягучага сайту"
+    },
+    "enabled_by_default": {
+        "message": "Уключыць для ўсіх сайтаў"
+    },
+    "transliteration_basic": {
+        "message": "Лацінка простая"
+    },
+    "transliteration_classic": {
+        "message": "Лацінка класічная"
+    },
+    "transliteration_official": {
+        "message": "Лацінка афіцыйная"
+    },
+    "transliteration_none": {
+        "message": "Кірыліца"
+    }
+}

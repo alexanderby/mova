@@ -3,10 +3,10 @@ import messenger from './messenger.js';
 import storage from './storage.js';
 import textProcessor from './text-processor.js';
 
+/** @typedef {import('../definitions').TranslationSettings} TranslationSettings */
+/** @typedef {import('../definitions').UserSettings} UserSettings */
 /** @typedef {import('./messenger').Message} Message */
 /** @typedef {import('./messenger').PortMessageListener} MessageListener */
-/** @typedef {import('./storage').TranslationSettings} TranslationSettings */
-/** @typedef {import('./storage').UserSettings} UserSettings */
 
 /** @type {Function[]} */
 const awaiting = [];

@@ -2,14 +2,15 @@ import {createExtendedDictionary} from '../translator/dictionary.js';
 import createTranslator from '../translator/index.js';
 import createKalhoznik from '../translator/trasianka.js';
 import createTrasliterator from '../transliterator/index.js';
+import transliteratorTypes from '../transliterator/transliterator-types.js';
 import {openFile} from '../utils/file.js';
 
-/** @typedef {import('./storage').TranslationSettings} TranslationSettings */
+/** @typedef {import('../definitions').TranslationSettings} TranslationSettings */
 
 /** @type {(text: string) => string} */
 let translate = null;
 
-/** @type {(text: string) => string} */
+/** @type {(text: string, type: string) => string}} */
 let transliterate = null;
 
 async function init() {
@@ -17,12 +18,18 @@ async function init() {
     const $ruEnds = await openFile('translator/endings.ru.txt');
     const $beEnds = await openFile('translator/endings.be.txt');
     const $trasianka = await openFile('translator/trasianka.txt');
-    const $lacinka = await openFile('transliterator/lacinka.official.txt');
+    const $lacinka = await Promise.all(
+        transliteratorTypes.map((type) => openFile(`transliterator/lacinka.${type}.txt`))
+    );
 
     const dictionary = createExtendedDictionary($dictionary, $ruEnds, $beEnds);
     const luka = createKalhoznik($trasianka);
     translate = createTranslator({dictionary, fallback: (word) => luka(word)});
-    transliterate = createTrasliterator($lacinka);
+    const transliterators = transliteratorTypes.reduce((map, type, i) => {
+        const transliterator = createTrasliterator($lacinka[i]);
+        return map.set(type, transliterator);
+    }, /** @type {Map<string, (text: string) => string>} */ new Map());
+    transliterate = (text, type) => transliterators.get(type)(text);
 }
 
 /**
@@ -31,11 +38,11 @@ async function init() {
  */
 function process(text, settings) {
     let result = text;
-    if (settings.translate) {
+    if (settings.translation === 'ru-be') {
         result = translate(result);
     }
-    if (settings.transliterate) {
-        result = transliterate(result);
+    if (settings.transliteration !== 'none') {
+        result = transliterate(result, settings.transliteration);
     }
     return result;
 }

@@ -1,5 +1,5 @@
 import state from './state.js';
-import {initUI} from './ui.js';
+import {initComponents} from './components/index.js';
 
 const port = chrome.runtime.connect({name: 'popup'});
 port.onMessage.addListener(({type, data}) => {
@@ -11,6 +11,6 @@ port.onMessage.addListener(({type, data}) => {
     }
 });
 
-initUI().then(() => {
+initComponents().then(() => {
     port.postMessage({type: 'get-app-data'});
 });

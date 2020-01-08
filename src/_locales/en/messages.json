@@ -8,10 +8,19 @@
     "toggle_website": {
         "message": "Toggle current website"
     },
-    "enabled_for_website": {
-        "message": "Enabled for"
-    },
     "enabled_by_default": {
         "message": "Enabled by default"
+    },
+    "transliteration_basic": {
+        "message": "Basic transliteration"
+    },
+    "transliteration_classic": {
+        "message": "Classic transliteration"
+    },
+    "transliteration_official": {
+        "message": "Official transliteration"
+    },
+    "transliteration_none": {
+        "message": "No transliteration"
     }
 }

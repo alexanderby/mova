@@ -10,6 +10,7 @@ body {
     align-items: stretch;
     display: flex;
     flex-direction: column;
+    font-family: var(--font);
     margin: 0;
     padding: 0;
     width: 100%;
