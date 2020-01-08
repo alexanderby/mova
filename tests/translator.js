@@ -4,7 +4,10 @@ import createTranslator from '../src/translator';
 import createTrasliterator from '../src/transliterator';
 import createKalhoznik from '../src/translator/trasianka';
 
-async function translate(sentence) {
+/**
+ * @returns {Promise<(text: string) => string>}
+ */
+async function createTextProcessor() {
     const dict = await fs.readFile('./src/translator/dictionary.ru-be.txt', 'utf8');
     const end0 = await fs.readFile('./src/translator/endings.ru.txt', 'utf8');
     const end1 = await fs.readFile('./src/translator/endings.be.txt', 'utf8');
@@ -16,12 +19,7 @@ async function translate(sentence) {
     const trans = createTranslator({dictionary: ext, fallback: (word) => luka(word)});
     const translit = createTrasliterator(lat);
 
-    const start = Date.now();
-    const result = translit(trans(sentence));
-    const end = Date.now();
-    console.log(end - start, 'ms');
-
-    return result;
+    return (sentence) => translit(trans(sentence));
 }
 
 function assert(value, expected, name) {
@@ -32,7 +30,36 @@ function assert(value, expected, name) {
     }
 }
 
-translate('Привет, как дела?')
-    .then((translation) => {
-        assert(translation, 'Pryvitannie, jak spravy?', 'translation');
-    });
+async function test() {
+    const translate = await createTextProcessor();
+    let total = 0;
+    let fails = 0;
+
+    /**
+     * @param {string} src
+     * @param {string} expected
+     */
+    function testTranslation(src, expected) {
+        const start = Date.now();
+        const result = translate(src);
+        const end = Date.now();
+        if (result === expected) {
+            console.log('OK', result, end - start, 'ms');
+        } else {
+            console.error('ERROR', `Expected "${expected}", but got "${result}"`);
+            fails++;
+        }
+        total++;
+    }
+
+    testTranslation('Привет, как дела?', 'Pryvitannie, jak spravy?');
+    testTranslation('чего-то', 'čahości');
+
+    if (fails === 0) {
+        console.info('All tests passed successfully');
+    } else {
+        console.error(`${fails} of ${total} tests failed`);
+    }
+}
+
+test();
