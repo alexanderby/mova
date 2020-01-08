@@ -11,6 +11,9 @@
     "enabled_by_default": {
         "message": "Уключыць для ўсіх сайтаў"
     },
+    "translation": {
+        "message": "Перакладаць на беларускую мову"
+    },
     "transliteration_basic": {
         "message": "Лацінка простая"
     },

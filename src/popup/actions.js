@@ -1,5 +1,6 @@
 import state from './state.js';
 
+/** @typedef {import('../definitions').TranslationType} TranslationType */
 /** @typedef {import('../definitions').TransliterationType} TransliterationType */
 /** @typedef {import('../definitions').UserSettings} UserSettings */
 
@@ -44,6 +45,13 @@ export function changeEnabledForCurrentWebsite(enabled) {
         }
         changeSettings({enabledFor: Array.from(sites)});
     }
+}
+
+/**
+ * @param {TranslationType} type
+ */
+export function changeTranslation(type) {
+    changeSettings({translation: type});
 }
 
 /**

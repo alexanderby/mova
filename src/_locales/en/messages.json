@@ -11,6 +11,9 @@
     "enabled_by_default": {
         "message": "Enabled by default"
     },
+    "translation": {
+        "message": "Translate into Belarusian"
+    },
     "transliteration_basic": {
         "message": "Basic transliteration"
     },

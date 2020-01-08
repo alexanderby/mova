@@ -11,6 +11,9 @@
     "enabled_by_default": {
         "message": "Uklučany dla ŭsich sajtaŭ"
     },
+    "translation": {
+        "message": "Pierakładać pa-biełarusku"
+    },
     "transliteration_basic": {
         "message": "Lacinka prostaja"
     },

@@ -127,9 +127,11 @@ const textManager = (() => {
                 return;
             }
 
+            const shouldTranslate = translationSettings.translation !== 'none' && !isBelarusian;
+
             const settings = /** @type {TranslationSettings} */({
                 ...translationSettings,
-                translation: isBelarusian ? 'none' : 'ru-be',
+                translation: shouldTranslate ? 'ru-be' : 'none',
             });
             messenger.send('translate', {id, text, settings});
         }
