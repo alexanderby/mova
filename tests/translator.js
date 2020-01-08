@@ -58,7 +58,7 @@ async function test() {
     if (fails === 0) {
         console.info('All tests passed successfully');
     } else {
-        console.error(`${fails} of ${total} tests failed`);
+        throw new Error(`${fails} of ${total} tests failed`);
     }
 }
 

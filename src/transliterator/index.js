@@ -1,14 +1,10 @@
 import {getCharHexCode} from '../utils/string.js';
 
-/**
- * @typedef RulesObject
- * @property {string[][]} rules
- * @property {{[group: string]: string[]}} groups
- */
+/** @typedef {[RegExp, (match: string) => string]} ReplacerTuple */
 
 /**
  * @param {string} rulesText
- * @returns {RulesObject}
+ * @returns {ReplacerTuple[]}
  */
 function parseRules(rulesText) {
     const rules = [];
@@ -29,18 +25,12 @@ function parseRules(rulesText) {
         }
         rules.push(ln.split(/\s+/g));
     }
-    return {rules, groups};
-}
 
-/**
- * @param {string} text
- * @param {RulesObject} options
- */
-function transliterate(text, {rules, groups}) {
-    return rules
-        .slice()
+    /** @type {ReplacerTuple[]} */
+    const replacers = [];
+    rules
         .sort(([a], [b]) => b.length - a.length)
-        .reduce((result, [cyrillic, latin = '']) => {
+        .forEach(([cyrillic, latin = '']) => {
             const start = cyrillic.startsWith('^')
                 ? '(?<=^|\\s)'
                 : cyrillic.startsWith('[')
@@ -65,16 +55,29 @@ function transliterate(text, {rules, groups}) {
                 .split('')
                 .map(c => `\\u${getCharHexCode(c)}`)
                 .join('');
-            return result.replace(
-                new RegExp(`${start}${unicode}${end}`, 'ig'),
-                match => {
-                    if (match === word) {
-                        return latin;
-                    }
-                    return `${latin.charAt(0).toUpperCase()}${latin.substring(1)}`;
+
+            const regexp = new RegExp(`${start}${unicode}${end}`, 'ig');
+            const replacer = (/** @type {string} */match) => {
+                if (match === word) {
+                    return latin;
                 }
-            );
-        }, text);
+                return `${latin.charAt(0).toUpperCase()}${latin.substring(1)}`;
+            };
+            replacers.push([regexp, replacer]);
+        });
+
+    return replacers;
+}
+
+/**
+ * @param {string} text
+ * @param {ReplacerTuple[]} replacers
+ */
+function transliterate(text, replacers) {
+    // TODO: Loop through characters, don't use RegExps.
+    return replacers.reduce((result, [regexp, replacer]) => {
+        return result.replace(regexp, replacer);
+    }, text);
 }
 
 /**
