@@ -9,10 +9,10 @@
         "message": "Уключыць ці выключыць для бягучага сайту"
     },
     "enabled_by_default": {
-        "message": "Уключыць для ўсіх сайтаў"
+        "message": "Уключыць паўсюль"
     },
     "translation": {
-        "message": "Перакладаць на беларускую мову"
+        "message": "Перакладаць"
     },
     "transliteration_basic": {
         "message": "Лацінка простая"
