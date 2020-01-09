@@ -1,3 +1,5 @@
+import {replaceYo} from '../utils/string.js';
+
 /**
  * @param {string} $dict
  * @returns {[string, string][]}
@@ -13,7 +15,7 @@ function parseDictionary($dict) {
         .map((p) => {
             return p
                 .map((w) => w.toLocaleLowerCase())
-                .map((w, i) => i === 0 ? w.split('ё').join('е') : w);
+                .map((w, i) => i === 0 ? replaceYo(w) : w);
         });
     return /** @type {[string, string][]} */(data);
 }
@@ -87,7 +89,12 @@ function getMatchedEndings(word, ends) {
  */
 function buildExtendedDictionary(dictionary, srcEnds, tgtEnds) {
     /** @type {Map<string, string>} */
-    const extended = new Map(dictionary);
+    const extended = new Map();
+    dictionary.forEach(([src, tgt]) => {
+        if (!extended.has(src)) {
+            extended.set(src, tgt);
+        }
+    });
 
     dictionary.forEach(([src, tgt]) => {
         const mSrc = getMatchedEndings(src, srcEnds);
@@ -135,7 +142,7 @@ function buildExtendedDictionary(dictionary, srcEnds, tgtEnds) {
  */
 export function createExtendedDictionary($dict, $srcEnds, $tgtEnds) {
     const dict = parseDictionary($dict);
-    const srcEnds = parseEndings($srcEnds);
+    const srcEnds = parseEndings(replaceYo($srcEnds));
     const tgtEnds = parseEndings($tgtEnds);
     return buildExtendedDictionary(dict, srcEnds, tgtEnds);
 }

@@ -23,3 +23,10 @@ export function getUnicodeRegexpPart(text) {
         .map((c) => `\\u${getCharHexCode(c)}`)
         .join('');
 }
+
+/**
+ * @param {string} text
+ */
+export function replaceYo(text) {
+    return text.replace(/\u0451/g, 'е');
+}
