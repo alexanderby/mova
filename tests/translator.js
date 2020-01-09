@@ -12,11 +12,12 @@ async function createTextProcessor() {
     const dict = await fs.readFile('./src/translator/dictionary.ru-be.txt', 'utf8');
     const end0 = await fs.readFile('./src/translator/endings.ru.txt', 'utf8');
     const end1 = await fs.readFile('./src/translator/endings.be.txt', 'utf8');
+    const form = await fs.readFile('./src/translator/forms.ru-be.txt', 'utf8');
     const pref = await fs.readFile('./src/translator/prefixes.ru-be.txt', 'utf8');
     const tras = await fs.readFile('./src/translator/trasianka.txt', 'utf8');
     const lat = await fs.readFile('./src/transliterator/lacinka.classic.txt', 'utf8');
 
-    const ext = createExtendedDictionary(dict, end0, end1);
+    const ext = createExtendedDictionary(dict, end0, end1, form);
     const luka = createKalhoznik(tras);
     const prefixes = parsePrefixes(pref);
     const trans = createTranslator({dictionary: ext, prefixes, fallback: (word) => luka(word)});

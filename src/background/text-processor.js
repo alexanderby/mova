@@ -18,13 +18,14 @@ async function init() {
     const $dictionary = await openFile('translator/dictionary.ru-be.txt');
     const $ruEnds = await openFile('translator/endings.ru.txt');
     const $beEnds = await openFile('translator/endings.be.txt');
+    const $forms = await openFile('translator/forms.ru-be.txt');
     const $prefixes = await openFile('translator/prefixes.ru-be.txt');
     const $trasianka = await openFile('translator/trasianka.txt');
     const $lacinka = await Promise.all(
         transliteratorTypes.map((type) => openFile(`transliterator/lacinka.${type}.txt`))
     );
 
-    const dictionary = createExtendedDictionary($dictionary, $ruEnds, $beEnds);
+    const dictionary = createExtendedDictionary($dictionary, $ruEnds, $beEnds, $forms);
     const prefixes = parsePrefixes($prefixes);
     const luka = createKalhoznik($trasianka);
     translate = createTranslator({dictionary, prefixes, fallback: (word) => luka(word)});

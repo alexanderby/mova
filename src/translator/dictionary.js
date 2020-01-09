@@ -55,11 +55,26 @@ function parseEndings($ends) {
 }
 
 /**
+ * @param {string} $forms
+ * @returns {[string, string][]}
+ */
+function parseForms($forms) {
+    return $forms
+        .split('\n')
+        .filter((ln) => ln.trim())
+        .map((ln) => {
+            const parts = ln.toLocaleLowerCase().split('\t');
+            return [replaceYo(parts[0]), parts[1]];
+        });
+}
+
+/**
  * @param {string} word
  * @param {EndingsCollection} ends
  * @returns {EndingsCollection}
  */
 function getMatchedEndings(word, ends) {
+    // TODO: Pick multiple matched groups (not longest only), then sort by longest match and choose best.
     let maxLen = 0;
     let matchedEnd = '';
     let matchedGroups = [];
@@ -82,14 +97,14 @@ function getMatchedEndings(word, ends) {
 }
 
 /**
- * @param {[string, string][]} dictionary 
+ * @param {[string, string][]} dictionary
  * @param {EndingsCollection} srcEnds
  * @param {EndingsCollection} tgtEnds
+ * @param {[string, string][]} forms
  * @returns {Map<string, string>}
  */
-function buildExtendedDictionary(dictionary, srcEnds, tgtEnds) {
-    /** @type {Map<string, string>} */
-    const extended = new Map();
+function buildExtendedDictionary(dictionary, srcEnds, tgtEnds, forms) {
+    const extended = new Map(forms);
     dictionary.forEach(([src, tgt]) => {
         if (!extended.has(src)) {
             extended.set(src, tgt);
@@ -138,11 +153,13 @@ function buildExtendedDictionary(dictionary, srcEnds, tgtEnds) {
  * @param {string} $dict Dictionary text
  * @param {string} $srcEnds Source endings text
  * @param {string} $tgtEnds Target endings text
+ * @param {string} $forms Static dictionary with different word forms.
  * @returns {Map<string, string>}
  */
-export function createExtendedDictionary($dict, $srcEnds, $tgtEnds) {
+export function createExtendedDictionary($dict, $srcEnds, $tgtEnds, $forms) {
     const dict = parseDictionary($dict);
     const srcEnds = parseEndings(replaceYo($srcEnds));
     const tgtEnds = parseEndings($tgtEnds);
-    return buildExtendedDictionary(dict, srcEnds, tgtEnds);
+    const forms = parseForms($forms);
+    return buildExtendedDictionary(dict, srcEnds, tgtEnds, forms);
 }
