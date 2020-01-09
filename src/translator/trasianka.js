@@ -16,11 +16,11 @@ function getTrasianka(word, rules) {
 }
 
 /**
- * @param {string} rulesText
+ * @param {string} $rules
  * @returns {(text: string) => string}
  */
-export default function createKalhoznik(rulesText) {
-    const rules = rulesText
+export default function createKalhoznik($rules) {
+    const rules = $rules
         .split('\n')
         .filter((ln) => ln)
         .map((ln) => ln.split(' '))

@@ -52,6 +52,7 @@ async function test() {
     testTranslation('экс-директору', 'eks-dyrektaru');
     testTranslation('белокраснобелый', 'biełačyrvonabieły');
     testTranslation('то моё, и это мое', 'to majo, i heta majo');
+    testTranslation('получилось', 'atrymalasia');
 
     if (fails === 0) {
         console.info('All tests passed successfully');

@@ -9,10 +9,12 @@ export default function parsePrefixes($prefixes) {
     $prefixes
         .split('\n')
         .filter((ln) => ln.trim() && !ln.startsWith('#'))
-        .sort((a, b) => b.length - a.length)
-        .forEach((ln) => {
-            let [src, tgt] = ln.split('\t');
-            src = replaceYo(src);
+        .map((ln) => {
+            const parts = ln.toLocaleLowerCase().split('\t');
+            return [replaceYo(parts[0]), parts[1]];
+        })
+        .sort((a, b) => b[0].length - a[0].length)
+        .forEach(([src, tgt]) => {
             if (!map.has(src)) {
                 map.set(src, tgt);
             }
