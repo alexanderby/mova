@@ -3,13 +3,25 @@ import {cyrillicRegexp, getUnicodeRegexpPart} from '../utils/string.js';
 /**
  * @param {string} word
  * @param {Map<string, string>} dictionary
+ * @param {Map<string, string>} prefixes
  * @param {(word: string) => string} fallback
  * @returns {string}
  */
-function translateWord(word, dictionary, fallback) {
+function translateWord(word, dictionary, prefixes, fallback) {
     if (dictionary.has(word)) {
         return dictionary.get(word);
     }
+
+    // TODO: More efficient prefix search.
+    for (const p of prefixes.keys()) {
+        if (word.startsWith(`${p}`)) {
+            const hasDash = word.charAt(p.length) === '-';
+            const remainder = word.substring(p.length + (hasDash ? 1 : 0));
+            const translation = translateWord(remainder, dictionary, prefixes, fallback);
+            return `${prefixes.get(p)}${hasDash ? '-' : ''}${translation}`;
+        }
+    }
+
     return fallback(word);
 }
 
@@ -32,12 +44,13 @@ function fixShortU(text) {
  * 
  * @param {string} text 
  * @param {Map<string, string>} dictionary
+ * @param {Map<string, string>} prefixes
  * @param {(word: string) => string} fallback
  * @returns {string}
  */
-function translateText(text, dictionary, fallback) {
+function translateText(text, dictionary, prefixes, fallback) {
     const translated = text.replace(cyrillicRegexp, (word) => {
-        const tr = translateWord(word.toLowerCase(), dictionary, fallback);
+        const tr = translateWord(word.toLowerCase(), dictionary, prefixes, fallback);
         const first = word[0];
         if (first.toLowerCase() === first) {
             return tr;
@@ -53,9 +66,9 @@ function translateText(text, dictionary, fallback) {
 
 /**
  * Creates text translator
- * @param {{dictionary: Map<string, string>; fallback: (word: string) => string}} options
+ * @param {{dictionary: Map<string, string>; prefixes: Map<string, string>; fallback: (word: string) => string}} options
  * @returns {(text: string) => string}
  */
-export default function createTranslator({dictionary, fallback}) {
-    return (text) => translateText(text, dictionary, fallback);
+export default function createTranslator({dictionary, prefixes, fallback}) {
+    return (text) => translateText(text, dictionary, prefixes, fallback);
 }
