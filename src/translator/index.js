@@ -1,13 +1,14 @@
-import {cyrillicRegexp, getUnicodeRegexpPart} from '../utils/string.js';
+import {cyrillicRegexp, getUnicodeRegexpPart, replaceYo} from '../utils/string.js';
 
 /**
- * @param {string} word
+ * @param {string} $word
  * @param {Map<string, string>} dictionary
  * @param {Map<string, string>} prefixes
  * @param {(word: string) => string} fallback
  * @returns {string}
  */
-function translateWord(word, dictionary, prefixes, fallback) {
+function translateWord($word, dictionary, prefixes, fallback) {
+    const word = replaceYo($word);
     if (dictionary.has(word)) {
         return dictionary.get(word);
     }
@@ -22,7 +23,7 @@ function translateWord(word, dictionary, prefixes, fallback) {
         }
     }
 
-    return fallback(word);
+    return fallback($word);
 }
 
 const shortURegex = new RegExp(
