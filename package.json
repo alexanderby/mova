@@ -4,7 +4,7 @@
   "private": true,
   "description": "A Russian to Belarusian translator for the browser",
   "scripts": {
-    "test": "node --experimental-modules --es-module-specifier-resolution=node tests/translator.js"
+    "test": "node --experimental-modules --es-module-specifier-resolution=node tests/index.js"
   },
   "repository": {
     "type": "git",
@@ -19,6 +19,7 @@
   "type": "module",
   "devDependencies": {
     "@types/chrome": "0.0.91",
+    "@types/fs-extra": "8.0.1",
     "@types/node": "12.12.21",
     "fs-extra": "8.1.0",
     "globby": "10.0.1"

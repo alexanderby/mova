@@ -23,7 +23,7 @@ export default function createKalhoznik($rules) {
     const rules = $rules
         .split('\n')
         .filter((ln) => ln)
-        .map((ln) => ln.split(' '))
+        .map((ln) => ln.split('\t'))
         .sort((a, b) => b[0].length - a[0].length);
 
     return (text) => getTrasianka(text, rules);

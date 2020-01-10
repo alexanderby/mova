@@ -3,10 +3,12 @@
         "target": "esnext",
         "module": "esnext",
         "moduleResolution": "node",
+        "allowSyntheticDefaultImports": true,
         "lib": [
             "esnext"
         ],
         "types": [
+            "fs-extra",
             "node"
         ],
         "allowJs": true,

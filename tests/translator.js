@@ -5,11 +5,7 @@ import parsePrefixes from '../src/translator/prefixes';
 import createTranslator from '../src/translator';
 import createTrasliterator from '../src/transliterator';
 import createKalhoznik from '../src/translator/trasianka';
-
-const green = (/** @type {string}*/text) => `\x1b[32m${text}\x1b[0m`;
-const yellow = (/** @type {string}*/text) => `\x1b[33m${text}\x1b[0m`;
-const red = (/** @type {string}*/text) => `\x1b[31m${text}\x1b[0m`;
-const gray = (/** @type {string}*/text) => `\x1b[90m${text}\x1b[0m`;
+import {log, colors} from '../tasks/utils';
 
 /**
  * @returns {Promise<(text: string) => string>}
@@ -34,7 +30,9 @@ async function createTextProcessor() {
     return (sentence) => translit(trans(sentence));
 }
 
-async function test() {
+export default async function test() {
+    log('Test translation');
+
     const translate = await createTextProcessor();
     let total = 0;
     let fails = 0;
@@ -48,9 +46,9 @@ async function test() {
         const result = translate(src);
         const end = Date.now();
         if (result === expected) {
-            console.log(green('OK'), result, gray(`${end - start}ms`));
+            log(`${colors.green('OK')} ${result} ${colors.gray(`${end - start}ms`)}`);
         } else {
-            console.error(red('ERROR'), `Expected ${green(expected)}, but got ${yellow(result)}`);
+            log(`${colors.red('ER')} Expected ${colors.green(expected)}, but got ${colors.yellow(result)}`);
             fails++;
         }
         total++;
@@ -64,13 +62,12 @@ async function test() {
     testTranslation('получилось', 'atrymałasia');
     testTranslation('Что они друг другу сказали?', 'Što jany adzin adnamu skazali?');
     testTranslation('человек-паук', 'čałaviek-pavuk');
+    testTranslation('немогуперевести', 'niemohupiereviesci');
 
     if (fails === 0) {
-        console.info(green('All tests passed successfully'));
+        log.ok('All translations are correct');
     } else {
-        console.error(fails, red('of'), total, red('tests failed'));
+        log.error(`${fails} of ${total} tests failed`);
         process.exit(13);
     }
 }
-
-test();
