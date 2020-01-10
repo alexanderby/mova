@@ -20,10 +20,16 @@
     "transliteration_classic": {
         "message": "Łacinka kłasičnaja"
     },
+    "transliteration_english": {
+        "message": "Ramanizatsyya BGN/PCGN"
+    },
     "transliteration_official": {
         "message": "Lacinka aficyjnaja"
     },
     "transliteration_none": {
-        "message": "Kirylica"
+        "message": "Кірыліца"
+    },
+    "transliteration_old": {
+        "message": "Łacinka XIX stahoddzia"
     }
 }

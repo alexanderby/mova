@@ -18,12 +18,18 @@
         "message": "Basic transliteration"
     },
     "transliteration_classic": {
-        "message": "Classic transliteration"
+        "message": "Classic latin script"
+    },
+    "transliteration_english": {
+        "message": "BGN/PCGN romanization"
     },
     "transliteration_official": {
         "message": "Official transliteration"
     },
     "transliteration_none": {
         "message": "No transliteration"
+    },
+    "transliteration_old": {
+        "message": "XIX century script"
     }
 }

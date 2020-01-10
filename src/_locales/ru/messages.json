@@ -20,10 +20,16 @@
     "transliteration_classic": {
         "message": "Лацінка класічная"
     },
+    "transliteration_english": {
+        "message": "Раманізацыя BGN/PCGN"
+    },
     "transliteration_official": {
         "message": "Лацінка афіцыйная"
     },
     "transliteration_none": {
         "message": "Кірыліца"
+    },
+    "transliteration_old": {
+        "message": "Лацінка XIX стагоддзя"
     }
 }

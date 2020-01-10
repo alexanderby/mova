@@ -1,5 +1,6 @@
 export default [
     'official',
     'classic',
-    'basic',
+    'old',
+    'english',
 ];

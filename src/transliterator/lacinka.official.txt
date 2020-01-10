@@ -1,22 +1,13 @@
-[consonant]
-б в г д ж з й к л м н п р с т ў ф х ц ч ш щ
-
-[vowel]
-а е ё и і о у ы э ю я
-
-[iot]
-е ё ю я
-
-[pause]
-' ’ - ў ъ
+[consonant-soft]
+б в г з к л м н п с ф х ц
 
 а a
 б b
 в v
 г h
 д d
-е e
-ё o
+е je
+ё jo
 ж ž
 з z
 і i
@@ -43,42 +34,19 @@
 ы y
 ь 
 э e
-ю u
-я a
+ю ju
+я ja
 ' 
 ’ 
 
-^е je
-^ё jo
-^ю ju
-^я ja
+[consonant-soft]е ie
+[consonant-soft]ё io
+[consonant-soft]ю iu
+[consonant-soft]я ia
 
-[pause]е je
-[pause]ё jo
-[pause]ю ju
-[pause]я ja
-
-[vowel]е je
-[vowel]ё jo
-[vowel]ю ju
-[vowel]я ja
-
-[consonant]е ie
-[consonant]ё io
-[consonant]ю iu
-[consonant]я ia
-
-[consonant]ея ieja
-[consonant]яе iaje
-[consonant]яя iaja
-
-бь b́
-вь v́
 зь ź
 ль ľ
-мь ḿ
 нь ń
-пь ṕ
 сь ś
 ць ć
 
