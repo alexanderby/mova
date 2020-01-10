@@ -32,7 +32,7 @@ function parseDictionary($dict) {
  * @param {string} $ends
  * @returns {EndingsCollection}
  */
-function parseEndings($ends) {
+export function parseEndings($ends) {
     const lines = $ends.split('\n').filter((ln) => ln && !ln.startsWith('#'));
 
     /** @type {EndingsCollection} */
@@ -74,26 +74,22 @@ function parseForms($forms) {
  * @returns {EndingsCollection}
  */
 function getMatchedEndings(word, ends) {
-    // TODO: Pick multiple matched groups (not longest only), then sort by longest match and choose best.
-    let maxLen = 0;
-    let matchedEnd = '';
-    let matchedGroups = [];
+    const matchedGroups = /** @type {EndingsCollection} */({});
     const groupNames = Object.keys(ends);
     for (const g of groupNames) {
+        let maxLen = 0;
+        let matchedEnd = '';
         for (const end in ends[g]) {
-            if (end.length === maxLen && end === matchedEnd) {
-                matchedGroups.push(g)
-            } else if (end.length > maxLen && word.endsWith(end)) {
+            if (end.length > maxLen && word.endsWith(end)) {
                 maxLen = end.length;
                 matchedEnd = end;
-                matchedGroups = [g];
             }
         }
+        if (maxLen > 0) {
+            matchedGroups[g] = {[matchedEnd]: ends[g][matchedEnd]};
+        }
     }
-    return matchedGroups.reduce((obj, g) => {
-        obj[g] = {[matchedEnd]: ends[g][matchedEnd]};
-        return obj;
-    }, {});
+    return matchedGroups;
 }
 
 /**
@@ -112,37 +108,41 @@ function buildExtendedDictionary(dictionary, srcEnds, tgtEnds, forms) {
     });
 
     dictionary.forEach(([src, tgt]) => {
+        if (src.length === 1 || tgt.length === 1) {
+            return;
+        }
+
         const mSrc = getMatchedEndings(src, srcEnds);
         const mTgt = getMatchedEndings(tgt, tgtEnds);
         const gSrc = Object.keys(mSrc);
         const gTgt = Object.keys(mTgt);
         const commonGroups = gSrc.filter((g) => gTgt.includes(g));
-        if (commonGroups.length === 0 || src.length === 1 || tgt.length === 1) {
-            extended.set(src, tgt);
+        if (commonGroups.length === 0) {
             return;
         }
 
-        /** @type {Map<string, string>} */
-        const chosen = new Map();
-        const majorSrcEnd = Object.keys(mSrc[commonGroups[0]])[0];
-        const majorTgtEnd = Object.keys(mTgt[commonGroups[0]])[0];
-        commonGroups.forEach((g) => {
-            const srcEndGr = mSrc[g][majorSrcEnd];
-            const tgtEndGr = mTgt[g][majorTgtEnd];
-            for (let i = 0; i < srcEndGr.length; i++) {
-                if (!chosen.has(srcEndGr[i])) {
-                    chosen.set(srcEndGr[i], tgtEndGr[i]);
+        commonGroups
+            .map((g) => {
+                const srcNomEnd = Object.keys(mSrc[g])[0];
+                const tgtNomEnd = Object.keys(mTgt[g])[0];
+                const srcEnds = mSrc[g][srcNomEnd];
+                const tgtEnds = mTgt[g][tgtNomEnd];
+                return [srcEnds, tgtEnds];
+            })
+            .sort((a, b) => b[0][0].length - a[0][0].length)
+            .forEach(([srcEnds, tgtEnds]) => {
+                const srcNomEnd = srcEnds[0];
+                const tgtNomEnd = tgtEnds[0];
+                const srcStart = src.substring(0, src.length - srcNomEnd.length);
+                const tgtStart = tgt.substring(0, tgt.length - tgtNomEnd.length);
+                for (let i = 1; i < srcEnds.length; i++) {
+                    const newSrc = `${srcStart}${srcEnds[i]}`;
+                    const newTgt = `${tgtStart}${tgtEnds[i]}`;
+                    if (!extended.has(newSrc)) {
+                        extended.set(newSrc, newTgt);
+                    }
                 }
-            }
-        });
-
-        for (const [srcEnd, tgtEnd] of chosen) {
-            const newSrc = src.substring(0, src.length - majorSrcEnd.length) + srcEnd;
-            const newTgt = tgt.substring(0, tgt.length - majorTgtEnd.length) + tgtEnd;
-            if (!extended.has(newSrc)) {
-                extended.set(newSrc, newTgt);
-            }
-        }
+            });
     });
 
     return extended;
