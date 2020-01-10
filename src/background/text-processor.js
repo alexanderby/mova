@@ -1,5 +1,6 @@
 import {createExtendedDictionary} from '../translator/dictionary.js';
 import createTranslator from '../translator/index.js';
+import parsePhrases from '../translator/phrases.js';
 import parsePrefixes from '../translator/prefixes.js';
 import createKalhoznik from '../translator/trasianka.js';
 import createTrasliterator from '../transliterator/index.js';
@@ -19,6 +20,7 @@ async function init() {
     const $ruEnds = await openFile('translator/endings.ru.txt');
     const $beEnds = await openFile('translator/endings.be.txt');
     const $forms = await openFile('translator/forms.ru-be.txt');
+    const $phrases = await openFile('translator/phrases.ru-be.txt');
     const $prefixes = await openFile('translator/prefixes.ru-be.txt');
     const $trasianka = await openFile('translator/trasianka.txt');
     const $lacinka = await Promise.all(
@@ -26,9 +28,10 @@ async function init() {
     );
 
     const dictionary = createExtendedDictionary($dictionary, $ruEnds, $beEnds, $forms);
+    const phrases = parsePhrases($phrases);
     const prefixes = parsePrefixes($prefixes);
     const luka = createKalhoznik($trasianka);
-    translate = createTranslator({dictionary, prefixes, fallback: (word) => luka(word)});
+    translate = createTranslator({dictionary, phrases, prefixes, fallback: (word) => luka(word)});
     const transliterators = transliteratorTypes.reduce((map, type, i) => {
         const transliterator = createTrasliterator($lacinka[i]);
         return map.set(type, transliterator);

@@ -42,34 +42,89 @@ function fixShortU(text) {
 }
 
 /**
+ * @param {string} src
+ * @param {string} tgt
+ * @returns {string}
+ */
+function copyCase(src, tgt) {
+    const first = src[0];
+    if (first.toLowerCase() === first) {
+        return tgt;
+    }
+    const last = src[src.length - 1]
+    if (first.toUpperCase() === first && last.toUpperCase() === last) {
+        return tgt.toUpperCase();
+    }
+    return `${tgt[0].toUpperCase()}${tgt.substring(1)}`;
+}
+
+/**
  * 
  * @param {string} text 
  * @param {Map<string, string>} dictionary
+ * @param {Map<string, Map|string>} phrases
  * @param {Map<string, string>} prefixes
  * @param {(word: string) => string} fallback
  * @returns {string}
  */
-function translateText(text, dictionary, prefixes, fallback) {
-    const translated = text.replace(cyrillicRegexp, (word) => {
-        const tr = translateWord(word.toLowerCase(), dictionary, prefixes, fallback);
-        const first = word[0];
-        if (first.toLowerCase() === first) {
-            return tr;
+function translateText(text, dictionary, phrases, prefixes, fallback) {
+    const matches = Array.from(text.matchAll(cyrillicRegexp));
+    if (matches.length === 0) {
+        return text;
+    }
+
+    const parts =/** @type {string[]} */[];
+    for (let i = 0; i < matches.length; i++) {
+        const m = matches[i];
+        const p = i === 0 ? null : matches[i - 1];
+        parts.push(text.substring(i === 0 ? 0 : p.index + p[0].length, m.index));
+
+        let didFindPhrase = false;
+        for (let j = i, node = phrases; j < matches.length; j++) {
+            if (j > i) {
+                const currMatch = matches[j];
+                const prevMatch = matches[j - 1];
+                const space = text.substring(prevMatch.index + prevMatch[0].length, currMatch.index);
+                if (space !== ' ') {
+                    break;
+                }
+            }
+
+            const currWord = matches[j][0].toLocaleLowerCase();
+            if (node.has(currWord)) {
+                const next = node.get(currWord);
+                if (typeof next === 'string') {
+                    const srcPhrase = text.substring(matches[i].index, matches[j].index + currWord.length);
+                    const translatedPhrase = copyCase(srcPhrase, next);
+                    parts.push(translatedPhrase);
+                    didFindPhrase = true;
+                    i = j;
+                    break;
+                } else {
+                    node = next;
+                }
+            } else {
+                break;
+            }
         }
-        const last = word[word.length - 1]
-        if (first.toUpperCase() === first && last.toUpperCase() === last) {
-            return tr.toUpperCase();
+
+        if (!didFindPhrase) {
+            const word = m[0];
+            const translation = translateWord(word.toLocaleLowerCase(), dictionary, prefixes, fallback);
+            parts.push(copyCase(word, translation));
         }
-        return tr[0].toUpperCase() + tr.substring(1);
-    });
-    return fixShortU(translated);
+    }
+    const last = matches[matches.length - 1];
+    parts.push(text.substring(last.index + last[0].length));
+
+    return fixShortU(parts.join(''));
 }
 
 /**
  * Creates text translator
- * @param {{dictionary: Map<string, string>; prefixes: Map<string, string>; fallback: (word: string) => string}} options
+ * @param {{dictionary: Map<string, string>; phrases: Map<string, Map|string>; prefixes: Map<string, string>; fallback: (word: string) => string}} options
  * @returns {(text: string) => string}
  */
-export default function createTranslator({dictionary, prefixes, fallback}) {
-    return (text) => translateText(text, dictionary, prefixes, fallback);
+export default function createTranslator({dictionary, phrases, prefixes, fallback}) {
+    return (text) => translateText(text, dictionary, phrases, prefixes, fallback);
 }
