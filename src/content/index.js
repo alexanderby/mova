@@ -264,6 +264,8 @@ const app = (() => {
             (prevSettings.transliteration !== settings.transliteration)
         );
 
+        storage.settings = settings;
+
         if (shouldRestore) {
             textManager.stopAndRestore();
         }
@@ -271,8 +273,6 @@ const app = (() => {
         if (isEnabled) {
             textManager.translateAndWatch();
         }
-
-        storage.settings = settings;
     }
 
     let visibilityHandler = null;
