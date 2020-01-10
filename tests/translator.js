@@ -63,6 +63,8 @@ export default async function test() {
     testTranslation('Что они друг другу сказали?', 'Što jany adzin adnamu skazali?');
     testTranslation('человек-паук', 'čałaviek-pavuk');
     testTranslation('немогуперевести', 'niemohupiereviesci');
+    testTranslation('TV-программа', 'TV-prahrama');
+    testTranslation('открыто на открытом', 'adčyniena na adčynienym');
     testTranslation('«ещё»', '"jašče"');
 
     if (fails === 0) {

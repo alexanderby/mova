@@ -1,6 +1,6 @@
 import fs from 'fs-extra';
 import {parseEndings} from '../src/translator/dictionary';
-import {log} from '../tasks/utils';
+import {log, colors} from '../tasks/utils';
 import {assert, assertLine} from './utils';
 
 function checkLF(/** @type {string} */text) {
@@ -39,10 +39,11 @@ async function testEndings() {
     assert(Object.keys(ruEnds).join(','), Object.keys(beEnds).join(','), 'groups are the same');
     assert(Object.keys(ruEnds).every((g) => {
         const ends = Object.values(ruEnds[g]).concat(Object.values(beEnds[g]));
-        if (!ends.every((e) => e.length === ends[0].length)) {
-            console.log(g, ends[0].length, ends.find((e) => e.length !== ends[0].length));
+        const diff = ends.find((e) => e.length !== ends[0].length);
+        if (diff) {
+            console.error(colors.red(`Count of endings is different: ${g}: ${diff[0]}`));
         }
-        return ends.every((e) => e.length === ends[0].length);
+        return diff == null;
     }), true, 'count of endings in each group is the same');
 }
 
