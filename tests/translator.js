@@ -63,6 +63,7 @@ async function test() {
     testTranslation('то моё, и это мое', 'to majo, i heta majo');
     testTranslation('получилось', 'atrymałasia');
     testTranslation('Что они друг другу сказали?', 'Što jany adzin adnamu skazali?');
+    testTranslation('человек-паук', 'čałaviek-pavuk');
 
     if (fails === 0) {
         console.info(green('All tests passed successfully'));

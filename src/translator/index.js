@@ -23,6 +23,10 @@ function translateWord($word, dictionary, prefixes, fallback) {
         }
     }
 
+    if (word.includes('-')) {
+        return word.split('-').map((part) => translateWord(part, dictionary, prefixes, fallback)).join('-');
+    }
+
     return fallback($word);
 }
 
@@ -90,7 +94,7 @@ function translateText(text, dictionary, phrases, prefixes, fallback) {
                 }
             }
 
-            const currWord = matches[j][0].toLocaleLowerCase();
+            const currWord = replaceYo(matches[j][0].toLocaleLowerCase());
             if (node.has(currWord)) {
                 const next = node.get(currWord);
                 if (typeof next === 'string') {
