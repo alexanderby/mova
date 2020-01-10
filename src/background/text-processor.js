@@ -5,7 +5,7 @@ import parsePrefixes from '../translator/prefixes.js';
 import createKalhoznik from '../translator/trasianka.js';
 import createTrasliterator from '../transliterator/index.js';
 import transliteratorTypes from '../transliterator/transliterator-types.js';
-import {openFile} from '../utils/file.js';
+import {openFile} from '../utils/extension.js';
 
 /** @typedef {import('../definitions').TranslationSettings} TranslationSettings */
 

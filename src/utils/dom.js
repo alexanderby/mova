@@ -1,4 +1,4 @@
-import {openFile} from '../utils/file.js';
+import {openFile} from '../utils/extension.js';
 
 /**
  * @param {string} selector

@@ -1,8 +1,10 @@
 /** @typedef {import('../definitions').TranslationSettings} TranslationSettings */
 /** @typedef {import('../definitions').UserSettings} UserSettings */
 
-/** @type {TranslationSettings} */
-let translationSettings;
+const storage = {
+    /** @type {TranslationSettings} */
+    settings: null,
+};
 
 const messenger = (() => {
     const port = chrome.runtime.connect({name: 'tab'});
@@ -123,14 +125,14 @@ const textManager = (() => {
             waitingNodes.set(id, node);
 
             const isBelarusian = hasBelarusianChars(text);
-            if (isBelarusian && translationSettings.transliteration === 'none') {
+            if (isBelarusian && storage.settings.transliteration === 'none') {
                 return;
             }
 
-            const shouldTranslate = translationSettings.translation !== 'none' && !isBelarusian;
+            const shouldTranslate = storage.settings.translation !== 'none' && !isBelarusian;
 
             const settings = /** @type {TranslationSettings} */({
-                ...translationSettings,
+                ...storage.settings,
                 translation: shouldTranslate ? 'ru-be' : 'none',
             });
             messenger.send('translate', {id, text, settings});
@@ -244,18 +246,13 @@ const textManager = (() => {
     };
 })();
 
-messenger.on('app-settings', (/** @type {UserSettings} */settings) => {
-    const prevSettings = translationSettings;
-    translationSettings = {
-        translation: settings.translation,
-        transliteration: settings.transliteration,
-    };
-
-    try {
-        const topHost = window.top.location.host;
-        if (!topHost) {
-            return;
-        }
+const app = (() => {
+    /**
+     * @param {UserSettings} settings
+     * @param {string} topHost
+     */
+    function apply(settings, topHost) {
+        const prevSettings = storage.settings;
 
         const isEnabled = settings.enabledByDefault ?
             !settings.disabledFor.includes(topHost) :
@@ -263,8 +260,8 @@ messenger.on('app-settings', (/** @type {UserSettings} */settings) => {
 
         const shouldRestore = prevSettings && (
             !isEnabled ||
-            (prevSettings.translation !== translationSettings.translation) ||
-            (prevSettings.transliteration !== translationSettings.transliteration)
+            (prevSettings.translation !== settings.translation) ||
+            (prevSettings.transliteration !== settings.transliteration)
         );
 
         if (shouldRestore) {
@@ -274,8 +271,42 @@ messenger.on('app-settings', (/** @type {UserSettings} */settings) => {
         if (isEnabled) {
             textManager.translateAndWatch();
         }
-    } catch (err) {
-    }
-});
 
-messenger.onDisconnect(() => textManager.stop());
+        storage.settings = settings;
+    }
+
+    let visibilityHandler = null;
+
+    function start() {
+        /** @type {string} */
+        let topHost;
+        try {
+            topHost = window.top.location.host;
+        } catch {
+            return;
+        }
+
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden && visibilityHandler) {
+                visibilityHandler();
+            }
+        });
+
+        messenger.on('app-settings', (/** @type {UserSettings} */settings) => {
+            if (document.hidden) {
+                visibilityHandler = () => {
+                    visibilityHandler = null;
+                    apply(settings, topHost);
+                };
+            } else {
+                apply(settings, topHost);
+            }
+        });
+
+        messenger.onDisconnect(() => textManager.stop());
+    }
+
+    return {start};
+})();
+
+app.start();

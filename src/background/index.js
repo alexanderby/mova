@@ -1,4 +1,4 @@
-import {getActiveTabHost} from '../utils/chrome.js';
+import {getActiveTabHost, getAllTabs, canInjectScript} from '../utils/extension.js';
 import messenger from './messenger.js';
 import storage from './storage.js';
 import textProcessor from './text-processor.js';
@@ -86,6 +86,18 @@ async function start() {
 
     isAppReady = true;
     awaiting.forEach((resolve) => resolve);
+
+    const tabs = await getAllTabs();
+    tabs
+        .filter((tab) => !tab.discarded)
+        .filter((tab) => canInjectScript(tab.url))
+        .sort((a, b) => Number(b.active) - Number(a.active))
+        .forEach((tab) => chrome.tabs.executeScript(tab.id, {
+            runAt: 'document_start',
+            file: '/content/index.js',
+            allFrames: true,
+            matchAboutBlank: true,
+        }));
 }
 
 start();
