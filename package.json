@@ -4,6 +4,7 @@
   "private": true,
   "description": "A Russian to Belarusian translator for the browser",
   "scripts": {
+    "build": "node --experimental-modules --es-module-specifier-resolution=node tasks/build.js",
     "sort-dictionary": "node --experimental-modules --es-module-specifier-resolution=node tasks/sort-dictionary.js",
     "test": "node --experimental-modules --es-module-specifier-resolution=node tests/index.js"
   },
@@ -21,9 +22,11 @@
   "devDependencies": {
     "@types/chrome": "0.0.91",
     "@types/fs-extra": "8.0.1",
-    "@types/node": "12.12.21",
+    "@types/node": "13.1.6",
+    "@types/yazl": "2.4.2",
     "fs-extra": "8.1.0",
-    "globby": "10.0.1"
+    "globby": "11.0.0",
+    "yazl": "2.5.1"
   },
   "dependencies": {}
 }
