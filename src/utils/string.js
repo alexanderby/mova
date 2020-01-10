@@ -2,6 +2,8 @@ export const cyrillicRegexp = new RegExp(
     /[\u0027\u0401\u0406\u040e\u0410-\u044f\u0451\u0456\u045e\u04e2\u04e3\u2019\-]+/g
 );
 
+export const punctuationRegexpPart = '\.,\?!\/\\"\'\<\>\(\)«»\\-_—';
+
 /**
  * @param {string} c
  * @returns {string}

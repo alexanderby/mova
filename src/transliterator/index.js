@@ -1,4 +1,4 @@
-import {getCharHexCode} from '../utils/string.js';
+import {getCharHexCode, punctuationRegexpPart} from '../utils/string.js';
 
 /** @typedef {[RegExp, (match: string) => string]} ReplacerTuple */
 
@@ -32,14 +32,14 @@ function parseRules(rulesText) {
         .sort(([a], [b]) => b.length - a.length)
         .forEach(([cyrillic, latin = '']) => {
             const start = cyrillic.startsWith('^')
-                ? '(?<=^|\\s)'
+                ? `(?<=^|\\s|[${punctuationRegexpPart}])`
                 : cyrillic.startsWith('[')
                     ? `(?<=${groups[cyrillic.substring(1, cyrillic.indexOf(']'))]
                         .map(c => `\\u${getCharHexCode(c)}`)
                         .join('|')})`
                     : '';
             const end = cyrillic.endsWith('$')
-                ? '(?=^|\\s)'
+                ? `(?=$|\\s|[${punctuationRegexpPart}])`
                 : cyrillic.endsWith(']')
                     ? `(?=${groups[
                         cyrillic.substring(cyrillic.indexOf('[') + 1, cyrillic.length - 1)

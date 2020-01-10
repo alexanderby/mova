@@ -63,6 +63,7 @@ export default async function test() {
     testTranslation('Что они друг другу сказали?', 'Što jany adzin adnamu skazali?');
     testTranslation('человек-паук', 'čałaviek-pavuk');
     testTranslation('немогуперевести', 'niemohupiereviesci');
+    testTranslation('«ещё»', '"jašče"');
 
     if (fails === 0) {
         log.ok('All translations are correct');
