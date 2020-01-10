@@ -4,6 +4,7 @@
   "private": true,
   "description": "A Russian to Belarusian translator for the browser",
   "scripts": {
+    "sort-dictionary": "node --experimental-modules --es-module-specifier-resolution=node tasks/sort-dictionary.js",
     "test": "node --experimental-modules --es-module-specifier-resolution=node tests/index.js"
   },
   "repository": {
