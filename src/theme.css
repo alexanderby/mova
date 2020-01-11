@@ -1,8 +1,6 @@
 :root {
     --color-bg: #fff;
-    --color-hover: #ccc;
-    --color-input: #ccc;
-    --color-input-hover: #aaa;
+    --color-hover: #eee;
     --color-text: #000;
     --color-text-inactive: #777;
     --color-accent: #d23;
@@ -14,8 +12,6 @@
     :root {
         --color-bg: #222;
         --color-hover: #333;
-        --color-input: #333;
-        --color-input-hover: #444;
         --color-text: #ddd;
         --color-text-inactive: #aaa;
         --url-logo: url(../icons/logo-dark-80x16.svg);
