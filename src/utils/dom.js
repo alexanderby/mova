@@ -1,5 +1,3 @@
-import {openFile} from '../utils/extension.js';
-
 /**
  * @param {string} selector
  * @param {(el: HTMLElement) => void} callback
@@ -97,17 +95,4 @@ export function style(rules) {
         }).join('\n');
         return `${selector} {\n${ruleText}\n}`;
     }).join('\n');
-}
-
-export async function loadWebComponent(htmlURL, cssURL, tag, constructor) {
-    const [html, css] = await Promise.all([
-        openFile(htmlURL),
-        openFile(cssURL),
-    ]);
-    const template = new DOMParser().parseFromString(html, 'text/html').querySelector('template');
-    const style = document.createElement('style');
-    style.textContent = css;
-    template.content.prepend(style);
-    constructor.template = template;
-    customElements.define(tag, constructor);
 }

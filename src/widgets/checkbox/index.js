@@ -1,16 +1,13 @@
 import checkmark from '../icons/checkmark.js';
+import templates from '../templates.js';
 
 export default class CheckBox extends HTMLElement {
-    static tag = 'mv-checkbox';
-    static htmlURL = 'widgets/checkbox/index.html';
-    static cssURL = 'widgets/checkbox/style.css';
-    /** @type {HTMLTemplateElement} */static template;
-
     constructor() {
         super();
 
         const root = this.attachShadow({mode: 'open'});
-        root.append(CheckBox.template.content.cloneNode(true));
+        const template = templates.get(CheckBox);
+        root.append(template.content.cloneNode(true));
         root.querySelector('.icon').append(checkmark());
 
         this.input = root.querySelector('input');

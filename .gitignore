@@ -1,7 +1,7 @@
 # Build files
 #-----------------------------------
-build
-build.zip
+build-chrome
+build-chrome.zip
 build-firefox
 build-firefox.xpi
 ext-dict.txt

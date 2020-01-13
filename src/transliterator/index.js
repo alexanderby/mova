@@ -1,6 +1,6 @@
 import {getCharHexCode, punctuationRegexpPart} from '../utils/string.js';
 
-/** @typedef {[RegExp, (match: string) => string]} ReplacerTuple */
+/** @typedef {[RegExp, (...matches: string[]) => string]} ReplacerTuple */
 
 /**
  * @param {string} rulesText
@@ -32,20 +32,20 @@ function parseRules(rulesText) {
         .sort(([a], [b]) => b.length - a.length)
         .forEach(([cyrillic, latin = '']) => {
             const start = cyrillic.startsWith('^')
-                ? `(?<=^|\\s|[${punctuationRegexpPart}])`
+                ? `^|\\s|[${punctuationRegexpPart}]`
                 : cyrillic.startsWith('[')
-                    ? `(?<=${groups[cyrillic.substring(1, cyrillic.indexOf(']'))]
+                    ? groups[cyrillic.substring(1, cyrillic.indexOf(']'))]
                         .map(c => `\\u${getCharHexCode(c)}`)
-                        .join('|')})`
+                        .join('|')
                     : '';
             const end = cyrillic.endsWith('$')
-                ? `(?=$|\\s|[${punctuationRegexpPart}])`
+                ? `$|\\s|[${punctuationRegexpPart}]`
                 : cyrillic.endsWith(']')
-                    ? `(?=${groups[
+                    ? groups[
                         cyrillic.substring(cyrillic.indexOf('[') + 1, cyrillic.length - 1)
                     ]
-                        .map(c => `\\u${getCharHexCode(c)}`)
-                        .join('|')})`
+                        .map((c) => `\\u${getCharHexCode(c)}`)
+                        .join('|')
                     : '';
             const word = cyrillic
                 .replace('^', '')
@@ -53,15 +53,22 @@ function parseRules(rulesText) {
                 .replace(/\[.*\]/g, '');
             const unicode = word
                 .split('')
-                .map(c => `\\u${getCharHexCode(c)}`)
+                .map((c) => `\\u${getCharHexCode(c)}`)
                 .join('');
 
-            const regexp = new RegExp(`${start}${unicode}${end}`, 'ig');
-            const replacer = (/** @type {string} */match) => {
-                if (match === word) {
-                    return latin;
-                }
-                return `${latin.charAt(0).toUpperCase()}${latin.substring(1)}`;
+            const regexp = new RegExp(`(${start})(${unicode})(${end})`, 'ig');
+            /**
+             * @param {string} _
+             * @param {string} mStart
+             * @param {string} match
+             * @param {string} mEnd
+             */
+            const replacer = (_, mStart, match, mEnd) => {
+                const isLowerCase = match === word;
+                const mid = isLowerCase ?
+                    latin :
+                    `${latin.charAt(0).toUpperCase()}${latin.substring(1)}`;
+                return `${mStart}${mid}${mEnd}`;
             };
             replacers.push([regexp, replacer]);
         });

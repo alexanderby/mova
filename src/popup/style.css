@@ -11,9 +11,10 @@ body {
     display: flex;
     flex-direction: column;
     font-family: var(--font);
+    font-size: 0.75rem;
     margin: 0;
     padding: 0;
-    width: 100%;
+    width: 11rem;
 }
 
 .logo {

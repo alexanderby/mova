@@ -1,16 +1,13 @@
 import checkmark from '../icons/checkmark.js';
+import templates from '../templates.js';
 
 export default class DropDown extends HTMLElement {
-    static tag = 'mv-dropdown';
-    static htmlURL = 'widgets/dropdown/index.html';
-    static cssURL = 'widgets/dropdown/style.css';
-    /** @type {HTMLTemplateElement} */static template;
-
     constructor() {
         super();
 
         const root = this.attachShadow({mode: 'open'});
-        root.append(DropDown.template.content.cloneNode(true));
+        const template = templates.get(DropDown);
+        root.append(template.content.cloneNode(true));
         root.querySelector('.icon').append(checkmark());
 
         this.itemTemplate = /** @type {HTMLTemplateElement} */(root.getElementById('dropdown-item-template'));

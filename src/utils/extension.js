@@ -1,3 +1,7 @@
+/** @firefox_start */
+export const IS_FIREFOX = navigator.userAgent.includes('Firefox');
+/** @firefox_end */
+
 /**
  * @returns {Promise<chrome.tabs.Tab>}
  */
@@ -38,6 +42,16 @@ export function getAllTabs() {
  * @returns {Promise<string>}
  */
 export function openFile(path) {
+    /** @firefox_start */
+    if (IS_FIREFOX) {
+        return new Promise(async (resolve) => {
+            const url = chrome.runtime.getURL(path);
+            const response = await fetch(url);
+            const text = await response.text();
+            resolve(text);
+        });
+    }
+    /** @firefox_end */
     return new Promise((resolve, reject) => {
         chrome.runtime.getPackageDirectoryEntry((root) => {
             root.getFile(path, {}, (fileEntry) => {
@@ -58,6 +72,16 @@ export function openFile(path) {
  * @returns {boolean}
  */
 export function canInjectScript(url) {
+    /** @firefox_start */
+    if (IS_FIREFOX) {
+        return !(
+            url.startsWith('about:') ||
+            url.startsWith('moz') ||
+            url.startsWith('view-source:') ||
+            url.startsWith('https://addons.mozilla.org')
+        );
+    }
+    /** @firefox_end */
     return !(
         url.startsWith('chrome://') ||
         url.startsWith('chrome-extension://') ||

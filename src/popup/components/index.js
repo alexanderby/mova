@@ -1,7 +1,8 @@
 import {isWebsiteEnabled} from '../../background/storage.js';
-import {query, loadWebComponent} from '../../utils/dom.js';
+import {query} from '../../utils/dom.js';
 import CheckBox from '../../widgets/checkbox/index.js';
 import DropDown from '../../widgets/dropdown/index.js';
+import {loadWebComponents} from '../../widgets/index.js';
 import {
     changeEnabledByDefault,
     changeEnabledForCurrentWebsite,
@@ -19,10 +20,6 @@ const webComponents = [
     DropDown,
 ];
 
-async function loadWebComponents() {
-    await Promise.all(webComponents.map((wc) => loadWebComponent(wc.htmlURL, wc.cssURL, wc.tag, wc)));
-}
-
 function initLocale() {
     query('[data-message]', (el) => {
         el.textContent = chrome.i18n.getMessage(el.dataset.message);
@@ -30,7 +27,7 @@ function initLocale() {
 }
 
 export async function initComponents() {
-    await loadWebComponents();
+    await loadWebComponents(webComponents);
 
     initLocale();
 
