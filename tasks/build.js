@@ -48,6 +48,7 @@ const firefoxJSRegex = /\/\*\*\s*@firefox_start\s*\*\/[\s\S]*?\/\*\*\s*@firefox_
 async function buildChrome() {
     const destDir = 'build-chrome';
     const destFile = 'build-chrome.zip';
+    await fs.remove(destDir);
     await copyDir('src', destDir, (buffer, file) => {
         if (file.endsWith('.js')) {
             return editBuffer(buffer, (content) => {
@@ -72,6 +73,7 @@ const firefoxManifestExtension = {
 async function buildFirefox() {
     const destDir = 'build-firefox';
     const destFile = 'build-firefox.xpi';
+    await fs.remove(destDir);
     await copyDir('src', destDir, (buffer, file) => {
         if (file.endsWith('manifest.json')) {
             return editBuffer(buffer, (content) => {
