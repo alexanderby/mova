@@ -70,6 +70,50 @@ const messenger = (() => {
     };
 })();
 
+const domQueue = (() => {
+    /** @type {(() => void)[]} */
+    const queue = [];
+    const frameDuration = 1000 / 60;
+    let frameId = null;
+
+    function requestFrame() {
+        if (frameId) {
+            return;
+        }
+
+        frameId = requestAnimationFrame(() => {
+            frameId = null;
+            const start = Date.now();
+            /** @type {() => void} */let cb;
+            while (cb = queue.shift()) {
+                cb();
+                if (Date.now() - start >= frameDuration) {
+                    requestFrame();
+                    break;
+                }
+            }
+        });
+    }
+
+    /**
+     * @param {() => void} callback
+     */
+    function add(callback) {
+        queue.push(callback);
+        requestFrame();
+    }
+
+    function clear() {
+        if (frameId) {
+            cancelAnimationFrame(frameId);
+            frameId = null;
+        }
+        queue.splice(0);
+    }
+
+    return {add, clear};
+})();
+
 const textManager = (() => {
     const cyrillicCharRegexp = new RegExp(
         /[\u0401\u0406\u040e\u0410-\u044f\u0451\u0456\u045e\u04e2\u04e3]/
@@ -153,11 +197,11 @@ const textManager = (() => {
         waitingNodes.delete(id);
         if (text != null) {
             sourceTexts.set(node, node.textContent);
-            if (observer) {
+            domQueue.add(() => {
                 handleMutations(observer.takeRecords());
-            }
-            node.textContent = text;
-            observer.takeRecords();
+                node.textContent = text;
+                observer.takeRecords();
+            });
         }
     });
 
@@ -210,8 +254,16 @@ const textManager = (() => {
         });
     }
 
+    function stop() {
+        domQueue.clear();
+        if (observer) {
+            observer.disconnect();
+            observer = null;
+        }
+    }
+
     function translateAndWatch() {
-        observer && observer.disconnect();
+        stop();
         handledTextNodes = new WeakSet();
         walkedNodes = new WeakSet();
 
@@ -222,13 +274,6 @@ const textManager = (() => {
             childList: true,
             characterData: true,
         });
-    }
-
-    function stop() {
-        if (observer) {
-            observer.disconnect();
-            observer = null;
-        }
     }
 
     function stopAndRestore() {
