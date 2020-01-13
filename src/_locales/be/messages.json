@@ -14,9 +14,6 @@
     "translation": {
         "message": "Pierakładać pa-biełarusku"
     },
-    "transliteration_basic": {
-        "message": "Lacinka prostaja"
-    },
     "transliteration_classic": {
         "message": "Łacinka kłasičnaja"
     },
@@ -31,5 +28,8 @@
     },
     "transliteration_old": {
         "message": "Łacinka XIX stahoddzia"
+    },
+    "help": {
+        "message": "Daviedka"
     }
 }

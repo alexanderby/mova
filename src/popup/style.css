@@ -40,3 +40,52 @@ body {
     white-space: nowrap;
     width: 100%;
 }
+
+.help-link {
+    color: var(--color-text);
+    display: inline-flex;
+    line-height: 1rem;
+    outline: none;
+    padding: 0.5rem;
+    text-decoration: none;
+    user-select: none;
+}
+
+.help-link:hover {
+    background-color: var(--color-hover);
+}
+
+.help-link__icon {
+    display: inline-block;
+    flex: none;
+    height: 1rem;
+    position: relative;
+    width: 1rem;
+}
+
+.help-link__icon:after {
+    border-radius: 50%;
+    border: 0.0625rem solid var(--color-accent);
+    box-sizing: border-box;
+    color: var(--color-text);
+    content: "?";
+    display: inline-block;
+    height: 1rem;
+    left: 0;
+    line-height: 0.875rem;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    width: 1rem;
+}
+
+.help-link__text {
+    margin-left: 0.25rem;
+    flex: auto;
+}
+
+.help-link__version {
+    color: var(--color-text);
+    flex: none;
+    opacity: 0.5;
+}

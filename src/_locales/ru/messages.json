@@ -14,9 +14,6 @@
     "translation": {
         "message": "Перакладаць"
     },
-    "transliteration_basic": {
-        "message": "Лацінка простая"
-    },
     "transliteration_classic": {
         "message": "Лацінка класічная"
     },
@@ -31,5 +28,8 @@
     },
     "transliteration_old": {
         "message": "Лацінка XIX стагоддзя"
+    },
+    "help": {
+        "message": "Даведка"
     }
 }

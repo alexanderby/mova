@@ -14,9 +14,6 @@
     "translation": {
         "message": "Translate into Belarusian"
     },
-    "transliteration_basic": {
-        "message": "Basic transliteration"
-    },
     "transliteration_classic": {
         "message": "Classic latin script"
     },
@@ -31,5 +28,8 @@
     },
     "transliteration_old": {
         "message": "XIX century script"
+    },
+    "help": {
+        "message": "Help"
     }
 }

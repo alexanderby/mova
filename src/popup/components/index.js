@@ -26,10 +26,18 @@ function initLocale() {
     });
 }
 
+function initVersion() {
+    const version = chrome.runtime.getManifest().version;
+    query('.js-version', (el) => {
+        el.textContent = version;
+    });
+}
+
 export async function initComponents() {
     await loadWebComponents(webComponents);
 
     initLocale();
+    initVersion();
 
     initEnabledForWebsite(createUIStream({
         stateToInput: ({host, settings}) => {
