@@ -5,8 +5,10 @@
   "description": "A Russian to Belarusian translator for the browser",
   "scripts": {
     "build": "node --experimental-modules --es-module-specifier-resolution=node tasks/build.js",
+    "print-ext-dict": "node --experimental-modules --es-module-specifier-resolution=node tasks/print-ext-dict.js",
     "sort-dictionary": "node --experimental-modules --es-module-specifier-resolution=node tasks/sort-dictionary.js",
-    "test": "node --experimental-modules --es-module-specifier-resolution=node tests/index.js"
+    "test": "node --experimental-modules --es-module-specifier-resolution=node tests/index.js",
+    "test-debug": "node --inspect-brk --experimental-modules --es-module-specifier-resolution=node tests/index.js"
   },
   "repository": {
     "type": "git",

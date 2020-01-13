@@ -4,6 +4,7 @@ build
 build.zip
 build-firefox
 build-firefox.xpi
+ext-dict.txt
 
 # Node.js modules
 #-----------------------------------
