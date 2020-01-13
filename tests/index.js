@@ -1,5 +1,5 @@
-import testDictionaries from './dictionaries';
-import testTranslation from './translator';
+import testDictionaries from './dictionaries.tests';
+import testTranslation from './translator.tests';
 
 async function test() {
     await testDictionaries();
