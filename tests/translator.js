@@ -66,6 +66,7 @@ export default async function test() {
     testTranslation('TV-программа', 'TV-prahrama');
     testTranslation('открыто на открытом', 'adčyniena na adčynienym');
     testTranslation('«ещё»', '"jašče"');
+    testTranslation('Такой парень женился на такой девушке!', 'Taki chłopiec ažaniŭsia na takoj dziaŭčynie!');
 
     if (fails === 0) {
         log.ok('All translations are correct');
