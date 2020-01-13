@@ -43,6 +43,7 @@ function editBuffer(buffer, editor) {
     return Buffer.from(edited);
 }
 
+const chromeJSRegex = /\/\*\*\s*@chrome_start\s*\*\/[\s\S]*?\/\*\*\s*@chrome_end\s*\*\//gm;
 const firefoxJSRegex = /\/\*\*\s*@firefox_start\s*\*\/[\s\S]*?\/\*\*\s*@firefox_end\s*\*\//gm;
 
 async function buildChrome() {
@@ -83,6 +84,11 @@ async function buildFirefox() {
                     ...firefoxManifestExtension,
                 };
                 return `${JSON.stringify(firefoxManifest, null, 4)}\n`;
+            });
+        }
+        if (file.endsWith('.js')) {
+            return editBuffer(buffer, (content) => {
+                return content.replace(chromeJSRegex, '');
             });
         }
         return buffer;

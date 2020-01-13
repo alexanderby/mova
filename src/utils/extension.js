@@ -52,6 +52,7 @@ export function openFile(path) {
         });
     }
     /** @firefox_end */
+    /** @chrome_start */
     return new Promise((resolve, reject) => {
         chrome.runtime.getPackageDirectoryEntry((root) => {
             root.getFile(path, {}, (fileEntry) => {
@@ -65,6 +66,7 @@ export function openFile(path) {
             }, reject);
         });
     });
+    /** @chrome_end */
 }
 
 /**
