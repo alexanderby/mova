@@ -123,7 +123,7 @@
         );
 
         const beCharRegexp = new RegExp(
-            /[\u0401\u0406\u045e\u04e2]/
+            /[\u0406\u040e\u0456\u045e]/
         );
 
         /**
