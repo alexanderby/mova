@@ -1,6 +1,17 @@
 /** @type {Set<chrome.runtime.Port>} */
 const tabPorts = new Set();
 
+/** @type {Set<number>} */
+const connectedTabs = new Set();
+
+/**
+ * @param {number} tabId
+ * @returns {boolean}
+ */
+function isTabConnected(tabId) {
+    return connectedTabs.has(tabId);
+}
+
 /**
  * @typedef Message
  * @property {string} type
@@ -64,8 +75,20 @@ function sendToAllTabs(data) {
  * @param {chrome.runtime.Port} port
  */
 function connectTab(port) {
+    const tabId = port.sender.tab.id;
+    if (port.sender.frameId === 0) {
+        connectedTabs.add(tabId);
+    }
+
     tabPorts.add(port);
-    port.onDisconnect.addListener(() => tabPorts.delete(port));
+
+    port.onDisconnect.addListener(() => {
+        tabPorts.delete(port);
+        if (port.sender.frameId === 0) {
+            connectedTabs.delete(tabId);
+        }
+    });
+
     port.onMessage.addListener((message) => {
         const sendMessage = createPortCallback(port);
         tabListeners.forEach((listener) => listener(message, sendMessage));
@@ -93,6 +116,7 @@ const connectors = {
 chrome.runtime.onConnect.addListener((port) => connectors[port.name](port));
 
 export default {
+    isTabConnected,
     onPopupMessage,
     onTabConnect,
     onTabMessage,

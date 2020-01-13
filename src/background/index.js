@@ -91,6 +91,7 @@ async function start() {
     tabs
         .filter((tab) => !tab.discarded)
         .filter((tab) => canInjectScript(tab.url))
+        .filter((tab) => !messenger.isTabConnected(tab.id))
         .sort((a, b) => Number(b.active) - Number(a.active))
         .forEach((tab) => chrome.tabs.executeScript(tab.id, {
             runAt: 'document_start',
