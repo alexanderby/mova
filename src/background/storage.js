@@ -6,7 +6,7 @@ const defaultSettings = {
     enabledFor: [],
     disabledFor: [],
     translation: 'ru-be',
-    transliteration: 'official',
+    transliteration: 'classic',
 };
 
 /**
