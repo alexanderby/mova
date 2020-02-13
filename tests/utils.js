@@ -5,12 +5,14 @@ import {log, colors} from '../tasks/utils';
  * @param {T} value
  * @param {T} expected
  * @param {string} message
+ * @param {() => string} [getErrorDetails]
  */
-export function assert(value, expected, message) {
+export function assert(value, expected, message, getErrorDetails) {
     if (value === expected) {
         log(`${colors.green('OK')} ${message}`);
     } else {
-        log.error(`ER ${message}: expected ${expected}, but got ${value}`);
+        const details = getErrorDetails ? getErrorDetails() : '';
+        log.error(`ER ${message}: expected ${expected}, but got ${value}${details ? ` (${details})` : ''}`);
         process.exit(13);
     }
 }
@@ -37,4 +39,18 @@ export function assertLine(text, pick, iterator, expected, message) {
         }
     }
     log(`${colors.green('OK')} ${message}`);
+}
+
+/**
+ * @param {string} text
+ * @param {number} index
+ */
+export function getTextPositionMessage(text, index) {
+    let line = 1;
+    const col = index - text.lastIndexOf('\n', index);
+    let i = -1;
+    while ((i = text.indexOf('\n', i + 1)) >= 0 && i < index) {
+        line++;
+    }
+    return `line ${line}, column ${col}`;
 }

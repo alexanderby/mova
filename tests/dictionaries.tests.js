@@ -1,10 +1,15 @@
 import fs from 'fs-extra';
 import {parseEndings} from '../src/translator/dictionary';
 import {log, colors} from '../tasks/utils';
-import {assert, assertLine} from './utils';
+import {assert, assertLine, getTextPositionMessage} from './utils';
 
 function checkLF(/** @type {string} */text) {
-    assert(text.includes('\r') && text.includes('\n'), false, 'LF endings');
+    assert(text.includes('\r'), false, 'LF endings', () => getTextPositionMessage(text, text.indexOf('\r')));
+}
+
+function checkNoLatin(/** @type {string} */text) {
+    const match = text.match(/[a-z]/i);
+    assert(match, null, 'no latin characters', () => getTextPositionMessage(text, match.index));
 }
 
 async function testMainDictionary() {
@@ -13,6 +18,7 @@ async function testMainDictionary() {
     const nonEmpty = (/** @type {string} */ln) => ln;
 
     checkLF(dict);
+    checkNoLatin(dict);
     assertLine(dict, nonEmpty, (ln) => Array.from(ln.matchAll(/\t/g)).length === 1, true, 'pairs are separated with tabs');
     assertLine(dict, nonEmpty, (ln) => ln.split('\t').length === 2, true, '2 items on each line');
     assertLine(dict, nonEmpty, (ln) => ln.split('\t').every((w) => w.trim() === w), true, 'no extra spaces');
@@ -26,6 +32,8 @@ async function testEndings() {
 
     function checkDict(/** @type {string} */dict, /** @type {string} */name) {
         assert(dict.includes('\r') && dict.includes('\n'), false, `${name}: LF endings`);
+        const latinMatches = Array.from(dict.matchAll(/(@[a-z\-]+)|([a-z]+)/ig)).filter((m) => m[2] != null);
+        assert(latinMatches.length, 0, `${name}: no latin characters`, () => getTextPositionMessage(dict, latinMatches[0].index));
         assertLine(dict, filter, (ln) => Array.from(ln.matchAll(/\t/g)).length > 0, true, `${name}: values are separated with tabs`);
         assertLine(dict, filter, (ln) => !ln.includes(' '), true, `${name}: no spaces`);
     }
@@ -52,7 +60,8 @@ async function testEndings() {
  */
 function checkSimpleDictionary(dict) {
     const filter = (/** @type  {string} */ln) => ln && !ln.startsWith('#');
-    assert(dict.includes('\r') && dict.includes('\n'), false, `LF endings`);
+    checkLF(dict);
+    checkNoLatin(dict);
     assertLine(dict, filter, (ln) => Array.from(ln.matchAll(/\t/g)).length === 1, true, `values are separated with tabs`);
     assertLine(dict, filter, (ln) => ln.split('\t').every((w) => w.trim() === w), true, `no extra spaces`);
 }
