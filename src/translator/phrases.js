@@ -9,6 +9,7 @@ import {replaceYo} from '../utils/string.js';
 export default function parsePhrases($phrases) {
     const tree = /** @type {Map<string, any>} */(new Map());
     $phrases
+        .toLowerCase()
         .split('\n')
         .filter((ln) => ln.trim() && !ln.startsWith('#'))
         .map((ln) => {
@@ -34,4 +35,3 @@ export default function parsePhrases($phrases) {
         });
     return tree;
 }
- 
