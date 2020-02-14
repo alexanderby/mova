@@ -295,13 +295,22 @@
     })();
 
     const app = (() => {
+        /** @type {string} */
+        let host;
+        try {
+            host = window.top.location.host;
+        } catch (err) {
+            console.warn(err);
+            host = location.host;
+        }
+
         /**
          * @param {UserSettings} settings
          */
         function isEnabledForWebsite(settings) {
             return settings.enabledByDefault ?
-                !settings.disabledFor.includes(topHost) :
-                settings.enabledFor.includes(topHost);
+                !settings.disabledFor.includes(host) :
+                settings.enabledFor.includes(host);
         }
 
         /** @type {UserSettings} */
@@ -340,16 +349,7 @@
 
         let visibilityHandler = null;
 
-        /** @type {string} */
-        let topHost;
-
         function start() {
-            try {
-                topHost = window.top.location.host;
-            } catch {
-                return;
-            }
-
             document.addEventListener('visibilitychange', () => {
                 if (!document.hidden && visibilityHandler) {
                     visibilityHandler();
@@ -382,7 +382,7 @@
             messenger.onDisconnect(() => textManager.stop());
         }
 
-        return {start, topHost};
+        return {start};
     })();
 
     app.start();
