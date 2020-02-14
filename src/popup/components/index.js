@@ -10,6 +10,7 @@ import {
     changeTranslation,
     changeTransliteration,
 } from '../actions.js';
+import state from '../state.js';
 import {createUIStream} from '../stream.js';
 import initEnabledByDefault from './enabled-by-default.js';
 import initEnabledForWebsite from './enabled-for-website.js';
@@ -79,4 +80,8 @@ export async function initComponents() {
         },
         output: ({selected}) => changeTransliteration(selected),
     }));
+
+    state.onChange((state) => {
+        document.body.classList.toggle('loading', state.isLoading);
+    });
 }

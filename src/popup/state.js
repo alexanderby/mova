@@ -4,12 +4,14 @@
  * @typedef State
  * @property {string} host
  * @property {UserSettings} settings
+ * @property {boolean} isLoading
  */
 
 /** @type {State} */
 const state = {
     host: null,
     settings: null,
+    isLoading: true,
 };
 
 /** @type {Set<(s: State) => void>} */

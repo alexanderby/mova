@@ -30,7 +30,14 @@ body {
     align-items: stretch;
     display: flex;
     flex-direction: column;
+    opacity: 1;
     overflow: hidden;
+    transition: opacity 0.25s;
+}
+
+.loading .controls {
+    opacity: 0;
+    pointer-events: none;
 }
 
 .host-name {
