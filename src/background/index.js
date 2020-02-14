@@ -111,10 +111,15 @@ async function start() {
     messenger.onTabMessage(onTabMessage);
     messenger.onEditorMessage(onEditorMessage);
 
+    chrome.browserAction.setBadgeBackgroundColor({color: 'white'});
+    chrome.browserAction.setBadgeText({text: '⌛'});
+
     await textProcessor.init();
 
     isAppReady = true;
     awaiting.forEach((resolve) => resolve);
+
+    chrome.browserAction.setBadgeText({text: ''});
 
     const tabs = await getAllTabs();
     tabs

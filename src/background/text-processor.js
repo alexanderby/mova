@@ -97,7 +97,7 @@ async function init() {
 
     setInterval(async () => {
         const $newPublicDict = await loadPublicDictionary();
-        if ($newPublicDict !== $publicDict) {
+        if ($newPublicDict && $newPublicDict !== $publicDict) {
             $publicDict = $newPublicDict;
             const $userDict = await getLocalStorageItem('user-dictionary');
             update($userDict);
