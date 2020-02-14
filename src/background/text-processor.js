@@ -55,7 +55,7 @@ export async function loadPublicDictionary() {
 }
 
 async function init() {
-    const [
+    let [
         $dictionary,
         $ruEnds,
         $beEnds,
@@ -94,6 +94,16 @@ async function init() {
         return map.set(type, transliterator);
     }, /** @type {Map<string, (text: string) => string>} */new Map());
     transliterate = (text, type) => transliterators.get(type)(text);
+
+    setInterval(async () => {
+        const $newPublicDict = await loadPublicDictionary();
+        if ($newPublicDict !== $publicDict) {
+            $publicDict = $newPublicDict;
+            const $userDict = await getLocalStorageItem('user-dictionary');
+            update($userDict);
+            console.log('Dictionary updated', new Date());
+        }
+    }, 1000 * 60 * 60 * 1);
 }
 
 /**
