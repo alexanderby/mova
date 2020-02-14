@@ -1,5 +1,13 @@
 export const cyrillicRegexp = new RegExp(
-    /[\u0027\u0401\u0406\u040e\u0410-\u044f\u0451\u0456\u045e\u04e2\u04e3\u2019\-]+/g
+    /[\u0027\u0401\u0406\u040e\u0410-\u044f\u0451\u0456\u045e\u2019\-]+/g
+);
+
+export const ruRegexp = new RegExp(
+    /[\u0027\u0401\u0410-\u044f\u0451\u2019\-]+/g
+);
+
+export const beRegexp = new RegExp(
+    /[\u0027\u0401\u0406\u040e\u0410-\u0417\u0419-\u0428\u042b-\u0437\u0439-\u0448\u044b-\u044f\u0451\u0456\u045e\u2019\-]+/g
 );
 
 export const punctuationRegexpPart = '\.,\?!\/\\"\'\<\>\(\)«»\\-_—';

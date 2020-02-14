@@ -1,5 +1,6 @@
 import fs from 'fs-extra';
 import {parseEndings} from '../src/translator/dictionary';
+import {validatePublicDictionary} from '../src/translator/public';
 import {log, colors} from '../tasks/utils';
 import {assert, assertLine, getTextPositionMessage} from './utils';
 
@@ -90,6 +91,18 @@ async function testTrasianka() {
     checkSimpleDictionary(dict);
 }
 
+async function testPublicDictionary() {
+    log('PUBLIČNY SLOŬNIK');
+    const dict = await fs.readFile('./public/ru-be.txt', 'utf8');
+    const {error} = validatePublicDictionary(dict);
+    if (error) {
+        log.error(`Josć pamyłki:\n${error}`);
+        process.exit(13);
+    } else {
+        log(`${colors.green('OK')} Usio dobra!`);
+    }
+}
+
 export default async function test() {
     await testMainDictionary();
     await testEndings();
@@ -97,5 +110,6 @@ export default async function test() {
     await testPrefixes();
     await testPhrases();
     await testTrasianka();
+    await testPublicDictionary();
     log.ok('Dictionaries are correct');
 }

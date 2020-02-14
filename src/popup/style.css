@@ -41,25 +41,13 @@ body {
     width: 100%;
 }
 
-.help-link {
-    color: var(--color-text);
-    display: inline-flex;
-    line-height: 1rem;
-    outline: none;
-    padding: 0.5rem;
-    text-decoration: none;
-    user-select: none;
-}
-
-.help-link:hover {
-    background-color: var(--color-hover);
-}
-
-.help-link__icon {
+.dictionary-link__icon::after {
+    color: var(--color-accent);
+    content: "✎";
     display: inline-block;
-    flex: none;
-    height: 1rem;
-    position: relative;
+    font-size: 1rem;
+    line-height: 1rem;
+    text-align: center;
     width: 1rem;
 }
 
@@ -71,17 +59,19 @@ body {
     content: "?";
     display: inline-block;
     height: 1rem;
-    left: 0;
     line-height: 0.875rem;
-    position: absolute;
     text-align: center;
-    top: 0;
     width: 1rem;
 }
 
+.help-link__content {
+    display: inline-flex;
+    width: 100%;
+}
+
 .help-link__text {
-    margin-left: 0.25rem;
     flex: auto;
+    width: 1;
 }
 
 .help-link__version {

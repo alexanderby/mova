@@ -5,7 +5,7 @@
     /** @typedef {import('../definitions').UserSettings} UserSettings */
 
     const storage = {
-        /** @type {TranslationSettings} */
+        /** @type {UserSettings} */
         settings: null,
     };
 
@@ -119,7 +119,7 @@
 
     const textManager = (() => {
         const cyrillicCharRegexp = new RegExp(
-            /[\u0401\u0406\u040e\u0410-\u044f\u0451\u0456\u045e\u04e2\u04e3]/
+            /[\u0401\u0406\u040e\u0410-\u044f\u0451\u0456\u045e]/
         );
 
         const beCharRegexp = new RegExp(
@@ -297,22 +297,29 @@
     const app = (() => {
         /**
          * @param {UserSettings} settings
-         * @param {string} topHost
          */
-        function apply(settings, topHost) {
-            const prevSettings = storage.settings;
-
-            const isEnabled = settings.enabledByDefault ?
+        function isEnabledForWebsite(settings) {
+            return settings.enabledByDefault ?
                 !settings.disabledFor.includes(topHost) :
                 settings.enabledFor.includes(topHost);
+        }
 
+        /** @type {UserSettings} */
+        let lastAppliedSettings = null;
+
+        /**
+         * @param {UserSettings} newSettings
+         */
+        function apply(newSettings) {
+            const prevSettings = lastAppliedSettings;
+            const isEnabled = isEnabledForWebsite(newSettings);
             const shouldRestore = prevSettings && (
                 !isEnabled ||
-                (prevSettings.translation !== settings.translation) ||
-                (prevSettings.transliteration !== settings.transliteration)
+                (prevSettings.translation !== newSettings.translation) ||
+                (prevSettings.transliteration !== newSettings.transliteration)
             );
 
-            storage.settings = settings;
+            lastAppliedSettings = newSettings;
 
             if (shouldRestore) {
                 textManager.stopAndRestore();
@@ -323,11 +330,20 @@
             }
         }
 
+        function refresh() {
+            const isEnabled = isEnabledForWebsite(storage.settings);
+            if (isEnabled) {
+                textManager.stopAndRestore();
+                textManager.translateAndWatch();
+            }
+        }
+
         let visibilityHandler = null;
 
+        /** @type {string} */
+        let topHost;
+
         function start() {
-            /** @type {string} */
-            let topHost;
             try {
                 topHost = window.top.location.host;
             } catch {
@@ -341,20 +357,32 @@
             });
 
             messenger.on('app-settings', (/** @type {UserSettings} */settings) => {
+                storage.settings = settings;
                 if (document.hidden) {
                     visibilityHandler = () => {
                         visibilityHandler = null;
-                        apply(settings, topHost);
+                        apply(settings);
                     };
                 } else {
-                    apply(settings, topHost);
+                    apply(settings);
+                }
+            });
+
+            messenger.on('dictionary-updated', () => {
+                if (document.hidden) {
+                    visibilityHandler = () => {
+                        visibilityHandler = null;
+                        refresh();
+                    };
+                } else {
+                    refresh();
                 }
             });
 
             messenger.onDisconnect(() => textManager.stop());
         }
 
-        return {start};
+        return {start, topHost};
     })();
 
     app.start();

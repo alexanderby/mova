@@ -2,6 +2,7 @@ import {isWebsiteEnabled} from '../../background/storage.js';
 import {query} from '../../utils/dom.js';
 import CheckBox from '../../widgets/checkbox/index.js';
 import DropDown from '../../widgets/dropdown/index.js';
+import Link from '../../widgets/link/index.js';
 import {loadWebComponents} from '../../widgets/index.js';
 import {
     changeEnabledByDefault,
@@ -18,6 +19,7 @@ import initTransliteration from './transliteration.js';
 const webComponents = [
     CheckBox,
     DropDown,
+    Link,
 ];
 
 function initLocale() {

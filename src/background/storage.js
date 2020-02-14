@@ -44,6 +44,39 @@ export function isWebsiteEnabled(host, settings) {
         isForcedEnabled;
 }
 
+/**
+ * @param {string} key
+ * @returns {Promise<string>}
+ */
+export function getLocalStorageItem(key) {
+    return new Promise((resolve, reject) => {
+        chrome.storage.local.get({[key]: ''}, (items) => {
+            if (chrome.runtime.lastError) {
+                reject(chrome.runtime.lastError);
+            } else {
+                resolve(items[key]);
+            }
+        });
+    });
+}
+
+/**
+ * @param {string} key
+ * @param {string} value
+ * @returns {Promise<void>}
+ */
+export function setLocalStorageItem(key, value) {
+    return new Promise((resolve, reject) => {
+        chrome.storage.local.set({[key]: value}, () => {
+            if (chrome.runtime.lastError) {
+                reject(chrome.runtime.lastError);
+            } else {
+                resolve();
+            }
+        });
+    });
+}
+
 const storage = {
     getUserSettings,
     setUserSettings,

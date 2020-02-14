@@ -1,6 +1,6 @@
 import {getActiveTabHost, getAllTabs, canInjectScript} from '../utils/extension.js';
 import messenger from './messenger.js';
-import storage from './storage.js';
+import storage, {setLocalStorageItem, getLocalStorageItem} from './storage.js';
 import textProcessor from './text-processor.js';
 
 /** @typedef {import('../definitions').TranslationSettings} TranslationSettings */
@@ -77,10 +77,39 @@ async function onPopupMessage({type, data}, sendMessage) {
     }
 }
 
+/**
+ * @param {string} $userDict
+ */
+async function onUpdateUserDictionary($userDict) {
+    await setLocalStorageItem('user-dictionary', $userDict);
+    textProcessor.update($userDict);
+    messenger.sendToAllTabs({type: 'dictionary-updated', data: null});
+}
+
+/**
+ * @param {(data: Message) => void} sendMessage
+ */
+async function onGetUserDictionary(sendMessage) {
+    const $dict = await getLocalStorageItem('user-dictionary');
+    sendMessage({type: 'user-dictionary', data: $dict});
+}
+
+/** @type {MessageListener} */
+async function onEditorMessage({type, data}, sendMessage) {
+    await whenAppReady();
+
+    if (type === 'change-user-dictionary') {
+        onUpdateUserDictionary(data);
+    } else if (type === 'get-user-dictionary') {
+        onGetUserDictionary(sendMessage);
+    }
+}
+
 async function start() {
     messenger.onPopupMessage(onPopupMessage);
     messenger.onTabConnect(onTabConnect);
     messenger.onTabMessage(onTabMessage);
+    messenger.onEditorMessage(onEditorMessage);
 
     await textProcessor.init();
 

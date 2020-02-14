@@ -4,6 +4,8 @@
     --color-text: #000;
     --color-text-inactive: #777;
     --color-accent: #d23;
+    --color-ok: #2a7;
+    --color-error: #d23;
     --font: Helvetia Neue, Open Sans, Segoe UI, Ubuntu, sans-serif;
     --url-logo: url(../icons/logo-light-80x16.svg);
 }
@@ -12,8 +14,8 @@
     :root {
         --color-bg: #222;
         --color-hover: #333;
-        --color-text: #ddd;
-        --color-text-inactive: #aaa;
+        --color-text: #c9c8c7;
+        --color-text-inactive: #999897;
         --url-logo: url(../icons/logo-dark-80x16.svg);
     }
 }

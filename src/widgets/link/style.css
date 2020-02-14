@@ -1,0 +1,33 @@
+@import "../../theme.css";
+
+:host {
+    display: inline-block;
+}
+
+.link {
+    box-sizing: border-box;
+    color: var(--color-text);
+    display: inline-flex;
+    line-height: 1rem;
+    outline: none;
+    padding: 0.5rem;
+    text-decoration: none;
+    user-select: none;
+    width: 100%;
+}
+
+.link:hover {
+    background-color: var(--color-hover);
+}
+
+.icon {
+    display: inline-block;
+    flex: none;
+    height: 1rem;
+    width: 1rem;
+}
+
+.content {
+    flex: auto;
+    margin-left: 0.25rem;
+}

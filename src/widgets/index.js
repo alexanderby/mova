@@ -1,11 +1,13 @@
 import {openFile} from '../utils/extension.js';
 import CheckBox from './checkbox/index.js';
 import DropDown from './dropdown/index.js';
+import Link from './link/index.js';
 import templates from './templates.js';
 
 const webComponents = {
     'checkbox': CheckBox,
     'dropdown': DropDown,
+    'link': Link,
 };
 const webComponentsIds = Object.entries(webComponents).reduce((map, [id, wc]) => {
     map.set(wc, id);

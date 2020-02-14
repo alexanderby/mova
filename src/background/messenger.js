@@ -42,6 +42,16 @@ function onTabMessage(listener) {
     tabListeners.add(listener);
 }
 
+/** @type {Set<PortMessageListener>} */
+const editorListeners = new Set();
+
+/**
+ * @param {PortMessageListener} listener
+ */
+function onEditorMessage(listener) {
+    editorListeners.add(listener);
+}
+
 /**
  * @typedef {(sendMessage: (msg: Message) => void) => void} TabConnectListener
  */
@@ -108,9 +118,20 @@ function connectPopup(port) {
     });
 }
 
+/**
+ * @param {chrome.runtime.Port} port
+ */
+function connectEditor(port) {
+    port.onMessage.addListener((message) => {
+        const sendMessage = createPortCallback(port);
+        editorListeners.forEach((listener) => listener(message, sendMessage));
+    });
+}
+
 const connectors = {
     'tab': connectTab,
     'popup': connectPopup,
+    'editor': connectEditor,
 };
 
 chrome.runtime.onConnect.addListener((port) => connectors[port.name](port));
@@ -120,5 +141,6 @@ export default {
     onPopupMessage,
     onTabConnect,
     onTabMessage,
+    onEditorMessage,
     sendToAllTabs,
 };

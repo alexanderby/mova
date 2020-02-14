@@ -29,6 +29,9 @@
     "transliteration_old": {
         "message": "XIX century script"
     },
+    "dictionary": {
+        "message": "Dictionary"
+    },
     "help": {
         "message": "Help"
     }

@@ -16,16 +16,17 @@
             --color-link: #05c;
             --color-link-visited: #83c;
             --font: Helvetia Neue, Open Sans, Segoe UI, Ubuntu, sans-serif;
+            --font-heading: Palatino, Roboto Slab, Georgia, Ubuntu, serif;
         }
 
         @media (prefers-color-scheme: dark) {
             :root {
                 --color-bg: #222;
                 --color-hover: #333;
-                --color-text: #ddd;
-                --color-text-inactive: #aaa;
+                --color-text: #c9c8c7;
+                --color-text-inactive: #999897;
                 --color-text-strong: #fff;
-                --color-accent: #f56;
+                --color-accent: #f34;
                 --color-link: #5bf;
                 --color-link-visited: #d7f;
             }
@@ -41,18 +42,19 @@
         }
 
         h1 {
-            color: var(--color-strong);
-            font-weight: 300;
+            color: var(--color-text-strong);
+            font-family: var(--font-heading);
         }
 
         h2 {
             color: var(--color-accent);
-            font-weight: 300;
+            font-family: var(--font-heading);
+            margin-bottom: 1rem;
         }
 
         h3 {
             color: var(--color-accent);
-            font-weight: 350;
+            font-family: var(--font-heading);
         }
 
         a {
@@ -67,27 +69,50 @@
             color: var(--color-text-strong);
         }
 
-        img.app-icon {
-            height: 0.75em;
-            width: 0.75em;
+        .logo-container {
+            padding-left: 1.125em;
+            position: relative;
+        }
+
+        .app-icon {
+            display: inline-block;
+            height: 1em;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 1em;
         }
     </style>
 </head>
 
 <body>
-    <h1>
+    <h1 class="logo-container">
         <img class="app-icon" src="../icons/icon-128x128.png" />
         Mova
     </h1>
 
     <h2>Daviedka</h2>
+    <ul>
+        <li>
+            <a href="#jak-karystacca">Jak karystacca</a>
+        </li>
+        <li>
+            <a href="#prapanovy-i-pamylki">Prapanovy i pamyłki</a>
+        </li>
+        <li>
+            <a href="#jak-drukavac-na-lacincy">Jak drukavać na łacincy</a>
+        </li>
+        <li>
+            <a href="#kantakty">Kantakty</a>
+        </li>
+    </ul>
     <p>
         <strong>Mova</strong> — heta pašyrennie dla braŭziera,
         jakoje aŭtamatyčna pierakładaje ŭsie veb-staronki
         z ruskaj na biełaruskuju movu.
     </p>
 
-    <h3>Jak karystacca</h3>
+    <h3 id="jak-karystacca">Jak karystacca</h3>
     <p>
         <strong>Knopka z adrasam sajty</strong> ŭklučaje ci vyklučaje pašyrennie dla biahučaha sajtu.
     </p>
@@ -129,20 +154,21 @@
         <a href="https://be.wikipedia.org/wiki/Беларускі_лацінскі_алфавіт">Vikipiedyi</a>.
     </p>
 
-    <h3>Zychodny kod, prapanovy i pamyłki</h3>
+    <h3 id="prapanovy-i-pamylki">Prapanovy i pamyłki</h3>
     <p>
         Pahladzieć ci papravić zychodny kod,
         prapanavać idei ci paviedamić ab pamyłkach
         vy možacie na <a href="https://github.com/alexanderby/mova">GitHub</a>.
     </p>
-
-    <h3>Kantakty</h3>
     <p>
-        Pa astatnich pytanniach pišycie na
-        <a href="mailto:movaddon@gmail.com">movaddon@gmail.com</a>.
+        Kab vypravić niedakładny pierakład, vy možacie vykarystać redaktar sloŭniku,
+        nacisnuŭšy kłavišu <strong>Sloŭnik</strong> i dadaŭšy tudy słovy ci spałučenni słovaŭ
+        z ich pierakładami na biełaruskuju movu.
+        Kali łaska, <strong>padzialiciesia vašym pierakładam</strong>.
+        Prapanovy, pacvierdžanyja na GitHub, aŭtamatyčna raspaŭsiudžvajucca ŭsim karystalnikam.
     </p>
 
-    <h2>Jak drukavać na łacincy</h2>
+    <h2 id="jak-drukavac-na-lacincy">Jak drukavać na łacincy</h2>
 
     Kali vy nie možacie ci lanujeciesia ŭstalavać kłaviaturu z dyjakrytykami,
     pasprabujcie vykarustoŭvać spałučenni litar:
@@ -201,6 +227,12 @@
                 <strong>ź</strong> — Option+E, Z.
             </li>
         </ul>
+    </p>
+
+    <h2 id="kantakty">Kantakty</h3>
+    <p>
+        Pa astatnich pytanniach pišycie na
+        <a href="mailto:movaddon@gmail.com">movaddon@gmail.com</a>.
     </p>
 
     <h2>Dziakuj</h2>

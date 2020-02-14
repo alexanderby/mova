@@ -19,10 +19,11 @@ async function createTextProcessor() {
     const pref = await fs.readFile('./src/translator/prefixes.ru-be.txt', 'utf8');
     const tras = await fs.readFile('./src/translator/trasianka.txt', 'utf8');
     const lat = await fs.readFile('./src/transliterator/lacinka.classic.txt', 'utf8');
+    const pub = await fs.readFile('./public/ru-be.txt', 'utf8');
 
     const ext = createExtendedDictionary(dict, end0, end1, form);
     const luka = createKalhoznik(tras);
-    const phrases = parsePhrases(phrs);
+    const phrases = parsePhrases(`${phrs}\n${pub}`);
     const prefixes = parsePrefixes(pref);
     const trans = createTranslator({dictionary: ext, phrases, prefixes, fallback: (word) => luka(word)});
     const translit = createTrasliterator(lat);
