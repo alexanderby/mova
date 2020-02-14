@@ -6,7 +6,13 @@ const editor = (() => {
     editorEl.addEventListener('keydown', (e) => {
         if (e.key === 'Tab') {
             e.preventDefault();
-            document.execCommand('insertText', false, '\t');
+            const start = editorEl.selectionStart;
+            const end = editorEl.selectionEnd;
+            const before = editorEl.value.substring(0, start);
+            const after = editorEl.value.substring(end);
+            editorEl.value = `${before}\t${after}`;
+            editorEl.focus();
+            editorEl.setSelectionRange(start + 1, start + 1);
         }
     });
 

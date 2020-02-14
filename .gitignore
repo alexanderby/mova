@@ -1,9 +1,6 @@
 # Build files
 #-----------------------------------
-build-chrome
-build-chrome.zip
-build-firefox
-build-firefox.xpi
+build
 ext-dict.txt
 
 # Node.js modules

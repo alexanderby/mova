@@ -47,8 +47,8 @@ const chromeJSRegex = /\/\*\*\s*@chrome_start\s*\*\/[\s\S]*?\/\*\*\s*@chrome_end
 const firefoxJSRegex = /\/\*\*\s*@firefox_start\s*\*\/[\s\S]*?\/\*\*\s*@firefox_end\s*\*\//gm;
 
 async function buildChrome() {
-    const destDir = 'build-chrome';
-    const destFile = 'build-chrome.zip';
+    const destDir = 'build/chrome';
+    const destFile = 'build/mova-chrome.zip';
     await fs.remove(destDir);
     await copyDir('src', destDir, (buffer, file) => {
         if (file.endsWith('.js')) {
@@ -63,17 +63,17 @@ async function buildChrome() {
 }
 
 const firefoxManifestExtension = {
-    applications: {
+    browser_specific_settings: {
         gecko: {
             id: 'addon@mova.org',
-            strict_min_version: '70.0',
+            strict_min_version: '68.0',
         },
     },
 };
 
 async function buildFirefox() {
-    const destDir = 'build-firefox';
-    const destFile = 'build-firefox.xpi';
+    const destDir = 'build/firefox';
+    const destFile = 'build/mova-firefox.xpi';
     await fs.remove(destDir);
     await copyDir('src', destDir, (buffer, file) => {
         if (file.endsWith('manifest.json')) {
