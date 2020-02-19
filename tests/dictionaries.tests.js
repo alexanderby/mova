@@ -92,7 +92,7 @@ async function testTrasianka() {
 }
 
 async function testPublicDictionary() {
-    log('PUBLIČNY SLOŬNIK');
+    log('PUBLIČNY SŁOŬNIK');
     const dict = await fs.readFile('./public/ru-be.txt', 'utf8');
     const {error} = validatePublicDictionary(dict);
     if (error) {
