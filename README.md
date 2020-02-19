@@ -3,9 +3,15 @@
 A browser extension for translating all Russian
 texts into Belarusian latin scripts.
 
+### Install
+
+- [Chrome (Chromium)](https://chrome.google.com/webstore/detail/mova/allmpacagboplmpkggjldlnabgpjpocf?hl=ru)
+- [Firefox](https://addons.mozilla.org/ru/firefox/addon/mova/)
+- [Firefox for Android](https://addons.mozilla.org/ru/android/addon/mova/)
+
 ### Build
 
-Running `npm install && npm run build` will produce a `build.zip` and `build-firefox.xpi` archives.
+Running `npm install && npm run build` will produce a `build/mova-chrome.zip` and `build/mova-firefox.xpi` archives.
 
 ### Debug
 
