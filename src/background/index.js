@@ -1,4 +1,5 @@
 import {getActiveTabHost, getAllTabs, canInjectScript} from '../utils/extension.js';
+import iconManager from './icon-manager.js';
 import messenger from './messenger.js';
 import storage, {setLocalStorageItem, getLocalStorageItem} from './storage.js';
 import textProcessor from './text-processor.js';
@@ -111,15 +112,14 @@ async function start() {
     messenger.onTabMessage(onTabMessage);
     messenger.onEditorMessage(onEditorMessage);
 
-    chrome.browserAction.setBadgeBackgroundColor({color: 'white'});
-    chrome.browserAction.setBadgeText({text: '⌛'});
+    iconManager.showWaitBadge();
 
     await textProcessor.init();
 
     isAppReady = true;
     awaiting.forEach((resolve) => resolve);
 
-    chrome.browserAction.setBadgeText({text: ''});
+    iconManager.hideBadge();
 
     const tabs = await getAllTabs();
     tabs
