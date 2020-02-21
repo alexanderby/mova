@@ -5,3 +5,10 @@ steps:
     node-version: 'lts/*'
 - run: npm install
 - run: npm test
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
