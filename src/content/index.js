@@ -308,11 +308,36 @@
     const app = (() => {
         /** @type {string} */
         let host;
-        try {
-            host = window.top.location.host;
-        } catch (err) {
-            console.warn(err);
-            host = location.host;
+
+        /**
+         * @returns {Promise<string>}
+         */
+        async function getTopHost() {
+            try {
+                return window.top.location.host;
+            } catch (err) {
+                return await requestTabHost();
+            }
+        }
+
+        /**
+         * @returns {Promise<string>}
+         */
+        function requestTabHost() {
+            const requestId = Array.from(crypto.getRandomValues(new Uint8Array(16))).map(v => v.toString(16).padStart(2, '0')).join('');
+            return new Promise((resolve) => {
+                /** @type {(data: {id: string; url: any}) => void} */
+                const onSenderTabUrl = (data) => {
+                    if (data.id === requestId) {
+                        messenger.off('sender-tab-url', onSenderTabUrl);
+                        const anchor = document.createElement('a');
+                        anchor.href = data.url;
+                        resolve(anchor.host);
+                    }
+                };
+                messenger.on('sender-tab-url', onSenderTabUrl);
+                messenger.send('get-sender-tab-url', requestId);
+            });
         }
 
         /**
@@ -360,7 +385,12 @@
 
         let visibilityHandler = null;
 
-        function start() {
+        async function start() {
+            host = await getTopHost();
+            if (!host) {
+                return;
+            }
+
             document.addEventListener('visibilitychange', () => {
                 if (!document.hidden && visibilityHandler) {
                     visibilityHandler();

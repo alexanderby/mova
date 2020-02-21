@@ -106,6 +106,19 @@ function connectTab(port) {
 
     const sendMessage = createPortCallback(port);
     tabConnectListeners.forEach((listener) => listener(sendMessage));
+
+    port.onMessage.addListener(({type, data}) => {
+        if (type === 'get-sender-tab-url') {
+            const requestId = data;
+            port.postMessage({
+                type: 'sender-tab-url',
+                data: {
+                    id: requestId,
+                    url: port.sender.tab.url,
+                },
+            });
+        }
+    });
 }
 
 /**
