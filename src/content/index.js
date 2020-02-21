@@ -142,6 +142,15 @@
             return beCharRegexp.test(text);
         }
 
+        /**
+         * @param {Node} node
+         * @returns {boolean}
+         */
+        function isParentEditable(node) {
+            const parent = node.parentElement;
+            return parent && parent.isContentEditable;
+        }
+
         /** @type {WeakSet<Text>} */
         let handledTextNodes;
         /** @type {WeakMap<Text, string>} */
@@ -222,7 +231,9 @@
             let node;
             while (node = /** @type {Text} */(walker.nextNode())) {
                 const parentName = node.parentNode.nodeName;
+
                 if (
+                    isParentEditable(node) ||
                     parentName === 'SCRIPT' ||
                     parentName === 'STYLE' ||
                     walkedNodes.has(node)
@@ -243,11 +254,11 @@
          */
         function handleMutations(mutations) {
             mutations.forEach(({target, addedNodes}) => {
-                if (target.nodeType === Node.TEXT_NODE) {
+                if (target.nodeType === Node.TEXT_NODE && !isParentEditable(target)) {
                     tryTranslateNode(/** @type {Text} */(target), true);
                 }
                 addedNodes.forEach((node) => {
-                    if (node.nodeType === Node.TEXT_NODE) {
+                    if (node.nodeType === Node.TEXT_NODE && !isParentEditable(target)) {
                         tryTranslateNode(/** @type {Text} */(node));
                     } else {
                         walkTextNodes(node, tryTranslateNode);
