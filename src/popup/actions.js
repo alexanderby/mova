@@ -1,4 +1,4 @@
-import state from './state.js';
+import {getState, setState} from './state.js';
 
 /** @typedef {import('../definitions').TranslationType} TranslationType */
 /** @typedef {import('../definitions').TransliterationType} TransliterationType */
@@ -8,9 +8,9 @@ import state from './state.js';
  * @param {Partial<UserSettings>} newSettings
  */
 function changeSettings(newSettings) {
-    state.set({
+    setState({
         settings: {
-            ...state.get().settings,
+            ...getState().settings,
             ...newSettings,
         },
     });
@@ -27,7 +27,7 @@ export function changeEnabledByDefault(enabled) {
  * @param {boolean} enabled
  */
 export function changeEnabledForCurrentWebsite(enabled) {
-    const {host, settings} = state.get();
+    const {host, settings} = getState();
     if (settings.enabledByDefault) {
         const sites = new Set(settings.disabledFor);
         if (enabled && sites.has(host)) {

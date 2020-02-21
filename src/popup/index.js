@@ -1,19 +1,20 @@
-import state from './state.js';
-import {initComponents} from './components/index.js';
+import messenger from './messenger.js';
+import {onStateChange, setState} from './state.js';
+import {initUI} from './ui.js';
 
-const port = chrome.runtime.connect({name: 'popup'});
-port.onMessage.addListener(({type, data}) => {
+messenger.onMessage((type, data) => {
     if (type === 'app-data') {
-        state.set({
+        setState({
             ...data,
             isLoading: false,
         });
-        state.onChange(({settings}) => {
-            port.postMessage({type: 'change-settings', data: settings});
-        });
+        onStateChange(({settings}) => messenger.sendMessage('change-settings', settings));
     }
 });
 
-initComponents().then(() => {
-    port.postMessage({type: 'get-app-data'});
-});
+async function start() {
+    await initUI();
+    messenger.sendMessage('get-app-data');
+}
+
+start();

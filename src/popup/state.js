@@ -14,13 +14,17 @@ const state = {
     isLoading: true,
 };
 
+export function getState() {
+    return state;
+}
+
 /** @type {Set<(s: State) => void>} */
 const stateChangeListeners = new Set();
 
 /**
  * @param {Partial<State>} newState
  */
-function setState(newState) {
+export function setState(newState) {
     Object.assign(state, newState);
     stateChangeListeners.forEach((cb) => cb(state));
 }
@@ -28,12 +32,6 @@ function setState(newState) {
 /**
  * @param {(s: State) => void} callback
  */
-function onStateChange(callback) {
+export function onStateChange(callback) {
     stateChangeListeners.add(callback);
 }
-
-export default {
-    get: () => state,
-    set: setState,
-    onChange: onStateChange,
-};
