@@ -1,5 +1,5 @@
 function showWaitBadge() {
-    if (!chrome.browserAction) {
+    if (!chrome.browserAction.setBadgeText) {
         return;
     }
     chrome.browserAction.setBadgeBackgroundColor({color: 'white'});
@@ -7,7 +7,7 @@ function showWaitBadge() {
 }
 
 function hideBadge() {
-    if (!chrome.browserAction) {
+    if (!chrome.browserAction.setBadgeText) {
         return;
     }
     chrome.browserAction.setBadgeText({text: ''});
