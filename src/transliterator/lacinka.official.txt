@@ -38,6 +38,7 @@
 я ja
 ' 
 ’ 
+ʼ 
 
 [consonant-soft]е ie
 [consonant-soft]ё io
