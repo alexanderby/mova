@@ -41,12 +41,15 @@ function parseRules(rulesText) {
             const end = cyrillic.endsWith('$')
                 ? `$|\\s|[${punctuationRegexpPart}]`
                 : cyrillic.endsWith(']')
-                    ? groups[
-                        cyrillic.substring(cyrillic.indexOf('[') + 1, cyrillic.length - 1)
-                    ]
-                        .map((c) => `\\u${getCharHexCode(c)}`)
-                        .join('|')
-                    : '';
+                    ? cyrillic.match(/(\[[\w-]*\])/g)
+						.map((element) => 
+							'(' + 
+							groups[element.substring(1, element.length - 1)]
+							.map(c => `\\u${getCharHexCode(c)}`)
+							.join('|')
+							+')')
+					.join('')	
+					: '';
             const word = cyrillic
                 .replace('^', '')
                 .replace('$', '')

@@ -1,5 +1,11 @@
 [consonant-soft]
-б в г з к м н п с ф х ц
+б в г з к м п с ф х ц
+
+[nearby-softener]
+б в дз з м н п с ф ц '  ’  ʼ 
+
+[softener]
+е ё і ь ю я
 
 а a
 б b
@@ -38,7 +44,11 @@
 я ja
 ' 
 ’ 
-ʼ 
+ʼ
+
+'і ji
+’і ji
+ʼі ji
 
 ле le
 лё lo
@@ -46,6 +56,26 @@
 ли li
 лю lu
 ля la
+
+лле lle
+ллё llo
+ллі lli
+лли lli
+ллю llu
+лля lla
+
+не nie
+нё nio
+ню niu
+ня nia
+ні ni
+
+нне ńnie
+ннё ńnio
+нню ńniu
+ння ńnia
+нні ńni
+ннь ńń
 
 [consonant-soft]е ie
 [consonant-soft]ё io
@@ -57,6 +87,10 @@
 нь ń
 сь ś
 ць ć
+
+з[nearby-softener][softener] ź
+с[nearby-softener][softener] ś
+ц[nearby-softener][softener] ć
 
 « "
 » "
